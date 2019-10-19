@@ -11,11 +11,11 @@
     ],
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/images/icon.png",
+    "icon": "./assets/images/sos_icon.jpg",
     "splash": {
-      "image": "./assets/images/splash.png",
+      "image": "./assets/images/sos_icon.jpg",
       "resizeMode": "contain",
-      "backgroundColor": "#ffffff"
+      "backgroundColor": "#000000"
     },
     "updates": {
       "fallbackToCacheTimeout": 0
