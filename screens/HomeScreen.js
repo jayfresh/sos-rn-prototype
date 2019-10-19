@@ -20,7 +20,7 @@ export default function HomeScreen() {
         contentContainerStyle={styles.contentContainer}>
         <View style={styles.welcomeContainer}>
           <Image
-            source={require('../assets/images/sos_icon.jpg')}
+            source={require('../assets/images/sos_icon.png')}
             style={styles.welcomeImage}
           />
         </View>

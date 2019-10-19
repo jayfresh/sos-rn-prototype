@@ -1,7 +1,7 @@
 {
   "expo": {
-    "name": "React Native prototype",
-    "slug": "react-native-prototype",
+    "name": "SOS React Native prototype",
+    "slug": "sos-react-native-prototype",
     "privacy": "public",
     "sdkVersion": "35.0.0",
     "platforms": [
@@ -9,11 +9,11 @@
       "android",
       "web"
     ],
-    "version": "1.0.0",
+    "version": "0.0.1",
     "orientation": "portrait",
-    "icon": "./assets/images/sos_icon.jpg",
+    "icon": "./assets/images/sos_icon.png",
     "splash": {
-      "image": "./assets/images/sos_icon.jpg",
+      "image": "./assets/images/sos_icon.png",
       "resizeMode": "contain",
       "backgroundColor": "#000000"
     },
