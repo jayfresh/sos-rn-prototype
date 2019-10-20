@@ -11,7 +11,7 @@ export default class AddItem extends React.Component {
                 <Touchable
                 style={styles.option}
                 background={Touchable.Ripple('#ccc', false)}
-                onPress={this._handlePressAddClass}>
+                onPress={this.props.onPress || this._handlePressAddItem}>
                 <View style={{ flexDirection: 'row' }}>
                     <View style={styles.optionIconContainer}>
                         <TabBarIcon name={Platform.OS === 'ios' ? 'ios-add-circle-outline' : 'md-add-circle-outline'} />
@@ -26,8 +26,8 @@ export default class AddItem extends React.Component {
     }
 }
 
-_handlePressAddClass = () => {
-    console.log('Pressed add class');
+_handlePressAddItem = () => {
+    console.log('Pressed add item');
 };
 
 const styles = StyleSheet.create({

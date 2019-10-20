@@ -4,6 +4,8 @@ import { createStackNavigator, createBottomTabNavigator } from 'react-navigation
 
 import TabBarIcon from '../components/TabBarIcon';
 import HomeScreen from '../screens/HomeScreen';
+import NewTeacherScreen from '../screens/NewTeacherScreen';
+import NewClassScreen from '../screens/NewClassScreen';
 import BossScreen from '../screens/BossScreen';
 import QueensScreen from '../screens/QueensScreen';
 import SettingsScreen from '../screens/SettingsScreen';
@@ -16,6 +18,7 @@ const config = Platform.select({
 const HomeStack = createStackNavigator(
   {
     Home: HomeScreen,
+    NewTeacher: NewTeacherScreen,
   },
   config
 );
@@ -35,6 +38,7 @@ HomeStack.path = '';
 const BossStack = createStackNavigator(
   {
       Boss: BossScreen,
+      NewClass: NewClassScreen,
   },
   config
 );
@@ -47,13 +51,6 @@ BossStack.navigationOptions = {
 };
 
 BossStack.path = '';
-
-const SettingsStack = createStackNavigator(
-  {
-    Settings: SettingsScreen,
-  },
-  config
-);
 
 const QueensStack = createStackNavigator(
   {

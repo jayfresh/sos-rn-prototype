@@ -10,27 +10,32 @@ import {
 
 import commonStyles from '../common/styles';
 import AddItem from '../components/AddItem';
-import { MonoText } from '../components/StyledText';
 
-export default function HomeScreen() {
-  return (
-    <View style={commonStyles.container}>
-      <ScrollView
-        style={commonStyles.container}
-        contentContainerStyle={styles.contentContainer}>
-        <View style={styles.welcomeContainer}>
-          <Image
-            source={require('../assets/images/sos_icon.png')}
-            style={styles.welcomeImage}
-          />
-        </View>
+export default class HomeScreen extends React.Component {
+  render() {
+    return (
+        <View style={commonStyles.container}>
+            <ScrollView
+                style={commonStyles.container}
+                contentContainerStyle={styles.contentContainer}>
+                <View style={styles.welcomeContainer}>
+                    <Image
+                        source={require('../assets/images/sos_icon.png')}
+                        style={styles.welcomeImage}
+                    />
+                </View>
 
-        <View style={styles.getStartedContainer}>
-          <AddItem text='Add a teacher' />
+                <View style={styles.getStartedContainer}>
+                    <AddItem text='Add a teacher' onPress={() => this.onPress() } />
+                </View>
+            </ScrollView>
         </View>
-      </ScrollView>
-    </View>
-  );
+    );
+  }
+
+  onPress() {
+    this.props.navigation.navigate('NewTeacher');
+  }
 }
 
 HomeScreen.navigationOptions = {
