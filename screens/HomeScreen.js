@@ -1,4 +1,3 @@
-import * as WebBrowser from 'expo-web-browser';
 import React from 'react';
 import {
   Image,
@@ -6,11 +5,11 @@ import {
   ScrollView,
   StyleSheet,
   Text,
-  TouchableOpacity,
   View,
 } from 'react-native';
 
 import commonStyles from '../common/styles';
+import AddItem from '../components/AddItem';
 import { MonoText } from '../components/StyledText';
 
 export default function HomeScreen() {
@@ -27,40 +26,9 @@ export default function HomeScreen() {
         </View>
 
         <View style={styles.getStartedContainer}>
-
-          <Text style={styles.getStartedText}>Get started by opening</Text>
-
-          <View
-            style={[styles.codeHighlightContainer, styles.homeScreenFilename]}>
-            <MonoText>screens/HomeScreen.js</MonoText>
-          </View>
-
-          <Text style={styles.getStartedText}>
-            Change this text and your app will automatically reload.
-          </Text>
-        </View>
-
-        <View style={commonStyles.helpContainer}>
-          <TouchableOpacity onPress={handleHelpPress} style={commonStyles.helpLink}>
-            <Text style={commonStyles.helpLinkText}>
-              Help, it didn’t automatically reload!
-            </Text>
-          </TouchableOpacity>
+          <AddItem text='Add a teacher' />
         </View>
       </ScrollView>
-
-      <View style={styles.tabBarInfoContainer}>
-        <Text style={styles.tabBarInfoText}>
-          This is a tab bar. You can edit it in:
-        </Text>
-
-        <View
-          style={[styles.codeHighlightContainer, styles.navigationFilename]}>
-          <MonoText style={styles.codeHighlightText}>
-            navigation/MainTabNavigator.js
-          </MonoText>
-        </View>
-      </View>
     </View>
   );
 }
@@ -68,12 +36,6 @@ export default function HomeScreen() {
 HomeScreen.navigationOptions = {
   header: null,
 };
-
-function handleHelpPress() {
-  WebBrowser.openBrowserAsync(
-    'https://docs.expo.io/versions/latest/workflow/up-and-running/#cant-see-your-changes'
-  );
-}
 
 const styles = StyleSheet.create({
   contentContainer: {

@@ -4,7 +4,8 @@ import { createStackNavigator, createBottomTabNavigator } from 'react-navigation
 
 import TabBarIcon from '../components/TabBarIcon';
 import HomeScreen from '../screens/HomeScreen';
-import LinksScreen from '../screens/LinksScreen';
+import BossScreen from '../screens/BossScreen';
+import QueensScreen from '../screens/QueensScreen';
 import SettingsScreen from '../screens/SettingsScreen';
 
 const config = Platform.select({
@@ -20,36 +21,32 @@ const HomeStack = createStackNavigator(
 );
 
 HomeStack.navigationOptions = {
-  tabBarLabel: 'Home',
+  tabBarLabel: 'Admin',
   tabBarIcon: ({ focused }) => (
     <TabBarIcon
       focused={focused}
-      name={
-        Platform.OS === 'ios'
-          ? `ios-information-circle${focused ? '' : '-outline'}`
-          : 'md-information-circle'
-      }
+      name={Platform.OS === 'ios' ? 'ios-school' : 'md-school'}
     />
   ),
 };
 
 HomeStack.path = '';
 
-const LinksStack = createStackNavigator(
+const BossStack = createStackNavigator(
   {
-    Links: LinksScreen,
+      Boss: BossScreen,
   },
   config
 );
 
-LinksStack.navigationOptions = {
-  tabBarLabel: 'Links',
+BossStack.navigationOptions = {
+  tabBarLabel: 'Boss',
   tabBarIcon: ({ focused }) => (
-    <TabBarIcon focused={focused} name={Platform.OS === 'ios' ? 'ios-link' : 'md-link'} />
+    <TabBarIcon focused={focused} name={Platform.OS === 'ios' ? 'ios-rocket' : 'md-rocket'} />
   ),
 };
 
-LinksStack.path = '';
+BossStack.path = '';
 
 const SettingsStack = createStackNavigator(
   {
@@ -58,19 +55,26 @@ const SettingsStack = createStackNavigator(
   config
 );
 
-SettingsStack.navigationOptions = {
-  tabBarLabel: 'Settings',
+const QueensStack = createStackNavigator(
+  {
+      Queens: QueensScreen,
+  },
+  config
+);
+
+QueensStack.navigationOptions = {
+  tabBarLabel: 'Queens',
   tabBarIcon: ({ focused }) => (
-    <TabBarIcon focused={focused} name={Platform.OS === 'ios' ? 'ios-options' : 'md-options'} />
+    <TabBarIcon focused={focused} name={Platform.OS === 'ios' ? 'ios-flame' : 'md-flame'} />
   ),
 };
 
-SettingsStack.path = '';
+QueensStack.path = '';
 
 const tabNavigator = createBottomTabNavigator({
   HomeStack,
-  LinksStack,
-  SettingsStack,
+  BossStack,
+  QueensStack,
 });
 
 tabNavigator.path = '';

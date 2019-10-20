@@ -1,8 +1,6 @@
 import React from 'react';
-import { View, Text, StyleSheet } from 'react-native';
+import { View } from 'react-native';
 import { ExpoConfigView } from '@expo/samples';
-
-import commonStyles from '../common/styles';
 
 export default function SettingsScreen() {
   /**
