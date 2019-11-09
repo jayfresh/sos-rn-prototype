@@ -7,63 +7,88 @@ import {
   Text,
   View,
 } from 'react-native';
-import { Divider, ListItem } from 'react-native-elements';
+import { Button, Divider, ListItem } from 'react-native-elements';
 
+import { db } from '../config'
 import commonStyles from '../common/styles';
 import AddItem from '../components/AddItem';
 
-const list = [
-  {
-    name: 'Amy Farha',
-    avatar_url: 'https://s3.amazonaws.com/uifaces/faces/twitter/ladylexy/128.jpg',
-    subtitle: 'amy@livingandfeeling.com'
-  },
-  {
-    name: 'Chris Jackson',
-    avatar_url: 'https://s3.amazonaws.com/uifaces/faces/twitter/adhamdannaway/128.jpg',
-    subtitle: 'chrisjackson97@gmail.com'
-  }
-];
+let list = null;
+
+const addUser = function() {
+    db.collection('users').add({
+        firstname: 'Alan',
+        lastname: 'Turing',
+        email: 'alant@bletchleypark.org'
+    })
+    .then(function(docRef) {
+        console.log('Document written with ID: ', docRef.id);
+    })
+    .catch(function(error) {
+        console.error('Error adding document: ', error);
+    });
+};
 
 export default class HomeScreen extends React.Component {
-  render() {
-    return (
-        <View style={commonStyles.container}>
-            <ScrollView
-                style={commonStyles.container}
-                contentContainerStyle={styles.contentContainer}>
-                <View style={styles.welcomeContainer}>
-                    <Image
-                        source={require('../assets/images/sos_icon.png')}
-                        style={styles.welcomeImage}
-                    />
-                </View>
-                <View style={styles.getStartedContainer}>
-                    <AddItem text='Add a teacher' onPress={() => this.onPress() } />
-                </View>
-                <Text style={{margin: 20}}>Teachers</Text>
-                <Divider />
-                <View>
-                    {
-                        list.map((l, i) => (
-                        <ListItem
-                            key={i}
-                            leftAvatar={{ source: { uri: l.avatar_url } }}
-                            title={l.name}
-                            subtitle={l.subtitle}
-                            bottomDivider
+    unsubscribe = null;
+    state = {
+        userList: list
+    };
+    componentDidMount() {
+        this.unsubscribe = db.collection('users')
+        .onSnapshot(querySnapshot => {
+            list = [];
+            querySnapshot.forEach((doc) => {
+                console.log(`${doc.id} => ${JSON.stringify(doc.data())}`);
+                list.push(doc.data());
+            });
+            this.setState({
+                userList: list
+            });
+        });
+    }
+    componentWillUnmount() {
+        this.unsubscribe && this.unsubscribe();
+    }
+    render() {
+        return (
+            <View style={commonStyles.container}>
+                <ScrollView
+                    style={commonStyles.container}
+                    contentContainerStyle={styles.contentContainer}>
+                    <View style={styles.welcomeContainer}>
+                        <Image
+                            source={require('../assets/images/sos_icon.png')}
+                            style={styles.welcomeImage}
                         />
+                    </View>
+                    <View style={styles.getStartedContainer}>
+                        <AddItem text='Add a teacher' onPress={() => this.onPress() } />
+                        <Button title='Add a user' onPress={() => addUser()} />
+                    </View>
+                    <Text style={{margin: 20}}>Teachers</Text>
+                    <Divider />
+                    <View>
+                        { this.state.userList && this.state.userList.map((l, i) => (
+                            <ListItem
+                                key={i}
+                                leftAvatar={{ source: { uri: l.avatar_url } }}
+                                title={l.firstname + ' ' + l.lastname}
+                                subtitle={l.email}
+                                bottomDivider
+                            />
                         ))
-                    }
-                </View>
-            </ScrollView>
-        </View>
-    );
-  }
+                        }
+                        { this.state.userList && this.state.userList.length === 0 && <Text>No teachers</Text>}
+                    </View>
+                </ScrollView>
+            </View>
+        );
+    }
 
-  onPress() {
-    this.props.navigation.navigate('NewTeacher');
-  }
+    onPress() {
+        this.props.navigation.navigate('NewTeacher');
+    }
 }
 
 HomeScreen.navigationOptions = {
