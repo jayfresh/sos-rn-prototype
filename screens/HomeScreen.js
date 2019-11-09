@@ -9,25 +9,11 @@ import {
 } from 'react-native';
 import { Button, Divider, ListItem } from 'react-native-elements';
 
-import { db } from '../config'
+import { db } from '../config';
 import commonStyles from '../common/styles';
 import AddItem from '../components/AddItem';
 
 let list = null;
-
-const addUser = function() {
-    db.collection('users').add({
-        firstname: 'Alan',
-        lastname: 'Turing',
-        email: 'alant@bletchleypark.org'
-    })
-    .then(function(docRef) {
-        console.log('Document written with ID: ', docRef.id);
-    })
-    .catch(function(error) {
-        console.error('Error adding document: ', error);
-    });
-};
 
 export default class HomeScreen extends React.Component {
     unsubscribe = null;
@@ -64,7 +50,6 @@ export default class HomeScreen extends React.Component {
                     </View>
                     <View style={styles.getStartedContainer}>
                         <AddItem text='Add a teacher' onPress={() => this.onPress() } />
-                        <Button title='Add a user' onPress={() => addUser()} />
                     </View>
                     <Text style={{margin: 20}}>Teachers</Text>
                     <Divider />

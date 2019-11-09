@@ -2,6 +2,7 @@ import React from 'react';
 import { View, ScrollView } from 'react-native';
 import { Button, Input, Overlay, Text, ThemeProvider } from 'react-native-elements';
 
+import { db } from '../config';
 import commonStyles from '../common/styles';
 
 const theme = {
@@ -18,6 +19,20 @@ const theme = {
     }
 };
 
+const addUser = function(data) {
+    return db.collection('users').add({
+        firstname: data.firstname,
+        lastname: data.lastname,
+        email: data.email
+    })
+    .then(function(docRef) {
+        console.log('Document written with ID: ', docRef.id);
+    })
+    .catch(function(error) {
+        console.error('Error adding document: ', error);
+    });
+};
+
 export default class NewTeacherScreen extends React.Component {
     constructor(props) {
         super(props);
@@ -27,6 +42,9 @@ export default class NewTeacherScreen extends React.Component {
     }
     state = {
         loading: false,
+        firstname: '',
+        lastname: '',
+        email: '',
         successOverlayVisible: false
     };
     clearForm = () => {
@@ -36,13 +54,15 @@ export default class NewTeacherScreen extends React.Component {
     };
     onPressSubmit = () => {
         this.setState({loading: true});
-        window.setTimeout(_ => {
+        // save to Firebase
+        addUser(data)
+        .then(_ => {
             this.clearForm();
             this.setState({
                 loading: false,
                 successOverlayVisible: true
             });
-        }, 2000);
+        });
     };
     backToAdminPress = () => {
         this.addMoreButtonPress();
