@@ -7,17 +7,76 @@ import {
   Text,
   View,
 } from 'react-native';
-import { Button, Divider, ListItem } from 'react-native-elements';
+import { AuthSession } from 'expo';
+import { Avatar, Button, Divider, ListItem } from 'react-native-elements';
 
 import { db } from '../config';
 import commonStyles from '../common/styles';
 import AddItem from '../components/AddItem';
 
+import getEnvVars from '../environment';
+const { auth0Config: {auth0Domain, auth0ClientId} } = getEnvVars();
+
 let list = null;
+
+const toQueryString = (obj) => {
+    return '?' + Object.keys(obj)
+    .map(key => key + '=' + encodeURIComponent(obj[key]))
+    .join('&');
+}
+
+class Auth0LoginContainer extends React.Component {
+    _loginWithAuth0 = async () => {
+        const redirectUrl = AuthSession.getRedirectUrl();
+        let authUrl = `https://${auth0Domain}/authorize` + toQueryString({
+            client_id: auth0ClientId,
+            response_type: 'token',
+            scope: 'openid profile email',
+            redirect_uri: redirectUrl
+        });
+        console.log(`Redirect URL (add this to Auth0): ${redirectUrl}`);
+        console.log(`AuthURL is:  ${authUrl}`);
+        const result = await AuthSession.startAsync({
+            authUrl: authUrl
+        });
+
+        if (result.type === 'success') {
+            console.log(result);
+            let token = result.params.access_token;
+            fetch(`https://${auth0Domain}/userinfo`, {
+                method: 'GET',
+                headers: {
+                    Authorization: `Bearer ${token}`
+                }
+            })
+            .then(response => response.json())
+            .then(userinfoResult => {
+                console.log(userinfoResult);
+                this.props.setParentState({
+                    loggedIn: true,
+                    givenName: userinfoResult.given_name,
+                    picture: userinfoResult.picture
+                });
+            });
+        }
+    };
+
+    render() {
+        return (
+            <Button
+                title='Login'
+                onPress={() => this._loginWithAuth0()}
+            />
+        );
+    }
+}
 
 export default class HomeScreen extends React.Component {
     unsubscribe = null;
     state = {
+        loggedIn: false,
+        givenName: null,
+        picture: null,
         userList: list
     };
     componentDidMount() {
@@ -50,6 +109,19 @@ export default class HomeScreen extends React.Component {
                     </View>
                     <View style={styles.getStartedContainer}>
                         <AddItem text='Add a teacher' onPress={() => this.onPress() } />
+                        <Auth0LoginContainer setParentState={state => this.setState(state)} />
+                        { this.state.loggedIn && (
+                            <View style={{display: 'flex', flexDirection: 'row'}}>
+                                <Avatar
+                                    rounded
+                                    source={{
+                                        uri: this.state.picture
+                                    }}
+                                    containerStyle={{marginRight: 20}}
+                                />
+                                <Text style={{alignSelf: 'center'}}>Hello {this.state.givenName}!</Text>
+                            </View>
+                        )}
                     </View>
                     <Text style={{margin: 20}}>Teachers</Text>
                     <Divider />
@@ -57,14 +129,13 @@ export default class HomeScreen extends React.Component {
                         { this.state.userList && this.state.userList.map((l, i) => (
                             <ListItem
                                 key={i}
-                                leftAvatar={{ source: { uri: l.avatar_url } }}
+                                leftAvatar={{ source: { uri: l.picture } }}
                                 title={l.firstname + ' ' + l.lastname}
                                 subtitle={l.email}
                                 bottomDivider
                             />
-                        ))
-                        }
-                        { this.state.userList && this.state.userList.length === 0 && <Text>No teachers</Text>}
+                        ))}
+                        { this.state.userList && this.state.userList.length === 0 && <Text>No teachers</Text> }
                     </View>
                 </ScrollView>
             </View>
