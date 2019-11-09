@@ -7,9 +7,23 @@ import {
   Text,
   View,
 } from 'react-native';
+import { Divider, ListItem } from 'react-native-elements';
 
 import commonStyles from '../common/styles';
 import AddItem from '../components/AddItem';
+
+const list = [
+  {
+    name: 'Amy Farha',
+    avatar_url: 'https://s3.amazonaws.com/uifaces/faces/twitter/ladylexy/128.jpg',
+    subtitle: 'amy@livingandfeeling.com'
+  },
+  {
+    name: 'Chris Jackson',
+    avatar_url: 'https://s3.amazonaws.com/uifaces/faces/twitter/adhamdannaway/128.jpg',
+    subtitle: 'chrisjackson97@gmail.com'
+  }
+];
 
 export default class HomeScreen extends React.Component {
   render() {
@@ -24,9 +38,23 @@ export default class HomeScreen extends React.Component {
                         style={styles.welcomeImage}
                     />
                 </View>
-
                 <View style={styles.getStartedContainer}>
                     <AddItem text='Add a teacher' onPress={() => this.onPress() } />
+                </View>
+                <Text style={{margin: 20}}>Teachers</Text>
+                <Divider />
+                <View>
+                    {
+                        list.map((l, i) => (
+                        <ListItem
+                            key={i}
+                            leftAvatar={{ source: { uri: l.avatar_url } }}
+                            title={l.name}
+                            subtitle={l.subtitle}
+                            bottomDivider
+                        />
+                        ))
+                    }
                 </View>
             </ScrollView>
         </View>
