@@ -44,6 +44,10 @@ export default class NewTeacherScreen extends React.Component {
             });
         }, 2000);
     };
+    backToAdminPress = () => {
+        this.addMoreButtonPress();
+        this.props.navigation.goBack();
+    };
     addMoreButtonPress = () => {
         this.setState({
             successOverlayVisible: false
@@ -62,10 +66,12 @@ export default class NewTeacherScreen extends React.Component {
                                 <Text h3 style={{marginBottom: 40}}>Teacher added!</Text>
                                 <Button
                                     title='Back to admin'
+                                    onPress={this.backToAdminPress}
                                     containerStyle={{marginVertical: 20}}
                                 />
                                 <Button
                                     title='Add more'
+                                    type='outline'
                                     onPress={this.addMoreButtonPress}
                                     containerStyle={{marginVertical: 20}}
                                 />
