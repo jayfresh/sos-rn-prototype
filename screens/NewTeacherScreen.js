@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, ScrollView } from 'react-native';
+import { TextInput, View, ScrollView } from 'react-native';
 import { Button, Input, Overlay, Text, ThemeProvider } from 'react-native-elements';
 
 import { db } from '../config';
@@ -43,6 +43,7 @@ export default class NewTeacherScreen extends React.Component {
     state = {
         loading: false,
         firstname: '',
+        firstname2: '',
         lastname: '',
         email: '',
         successOverlayVisible: false
@@ -55,7 +56,11 @@ export default class NewTeacherScreen extends React.Component {
     onPressSubmit = () => {
         this.setState({loading: true});
         // save to Firebase
-        addUser(data)
+        addUser({
+            firstname: this.state.firstname,
+            lastname: this.state.lastname,
+            email: this.state.email
+        })
         .then(_ => {
             this.clearForm();
             this.setState({
@@ -106,17 +111,25 @@ export default class NewTeacherScreen extends React.Component {
                             label='First name'
                             placeholder='Beyoncé'
                             ref={this.input1Ref}
+                            value={this.state.firstname}
+                            onChangeText={text => this.setState({firstname: text})}
                         />
                         <Input
                             label='Last name'
                             placeholder='Knowles'
                             ref={this.input2Ref}
+                            value={this.state.lastname}
+                            onChangeText={text => this.setState({lastname: text})}
                         />
                         <Input
                             label='Email address'
                             placeholder='queen@beyonceknowles.com'
                             rightIcon={{ name: 'email', type: 'material' }}
                             ref={this.input3Ref}
+                            value={this.state.email}
+                            keyboardType='email-address'
+                            onBlur={() => this.setState({email: this.state.email.toLowerCase()})}
+                            onChangeText={text => this.setState({email: text})}
                         />
                         <Button
                             title="Submit"
