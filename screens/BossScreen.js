@@ -15,7 +15,7 @@ export default class BossScreen extends React.Component {
     };
     onComponentFocus() {
         const userEmail = this.props.navigation.getParam('userEmail', '');
-        console.log('userEmail param:', userEmail);
+        console.log('BossScreen userEmail param:', userEmail);
         this.unsubscribe = db.collection('classes').orderBy('startTime')
         .onSnapshot(querySnapshot => {
             list = [];
@@ -27,8 +27,17 @@ export default class BossScreen extends React.Component {
                 classList: list
             });
         });
+        console.log('BossScreen set classes listener');
     }
     onComponentBlur() {
+        console.log('removing BossScreen classes listener');
+        this.unsubscribe && this.unsubscribe();
+    }
+    componentDidMount() {
+        console.log('BossScreen did mount');
+    }
+    componentWillUnmount() {
+        console.log('BossScreen will unmount');
         this.unsubscribe && this.unsubscribe();
     }
     render() {
@@ -37,6 +46,8 @@ export default class BossScreen extends React.Component {
                 <NavigationEvents
                     onWillFocus={_ => this.onComponentFocus()}
                     onWillBlur={_ => this.onComponentBlur()}
+                    onDidFocus={payload => console.log('did focus', payload)}
+                    onDidBlur={payload => console.log('did blur', payload)}
                 />
                 <AddItem text='Add a class' onPress={() => this.onPress()} />
                 <View>
@@ -47,7 +58,7 @@ export default class BossScreen extends React.Component {
                     { this.state.classList && this.state.classList.map((c, i) => (
                         <ListItem
                             key={i}
-                            title={c.name + ' @ ' + c.location}
+                            title={c.name + ' @ ' + c.location + (c.bookings && c.bookings.length ? ` (${c.bookings.length} bookings)` : '')}
                             subtitle={formatDate(c.startTime) + ' / ' + c.duration + ' minutes'}
                             bottomDivider
                         />

@@ -6,15 +6,33 @@ import { db, firebase } from '../config';
 import commonStyles from '../common/styles';
 import theme from '../common/theme';
 
+const TEST_QUEEN_ID = 'testUserID';
+
 export default class ClassDetailScreen extends React.Component {
     state = {
-        userID: 'testUserID',
+        userID: TEST_QUEEN_ID,
         successOverlayVisible: false,
-        classID: '5PnhbRWeVu2KysBZoyDQ',
-        className: 'test class',
-        classDuration: '45 minutes',
-        classLocation: '1 Summerfield Place, Abercrombie, S1 4LT'
+        classID: '',
+        className: '',
+        classDuration: '',
+        classLocation: '',
+        classBookings: '',
+        booked: false
     };
+    componentDidMount = () => {
+        const c = this.props.navigation.getParam('class');
+        console.log('class param', c);
+        if (c) {
+            this.setState({
+                classID: c.id,
+                className: c.name,
+                classDuration: c.duration,
+                classLocation: c.location,
+                classBookings: c.bookings && c.bookings.length,
+                booked: c.bookings && c.bookings.includes(TEST_QUEEN_ID)
+            });
+        }
+    }
     onPressSubmit = () => {
         // update the class in the database with the customer ID
         var classRef = db.collection('classes').doc(this.state.classID);
@@ -57,11 +75,13 @@ export default class ClassDetailScreen extends React.Component {
                 }
                 <View>
                     <Text h3 style={[commonStyles.headingText, {marginBottom: 20}]}>{this.state.className}</Text>
-                    <Text style={commonStyles.bodyText}>{this.state.classDuration}</Text>
-                    <Text style={commonStyles.bodyText}>{this.state.classLocation}</Text>
+                    <Text style={commonStyles.bodyText}>Location: {this.state.classLocation}</Text>
+                    <Text style={commonStyles.bodyText}>Duration: {this.state.classDuration} minutes</Text>
                     <ThemeProvider theme={theme}>
                         <Button
-                            title='Book class'
+                            title={this.state.booked ? 'You\'re booked' : 'Book class'}
+                            type={this.state.booked ? 'clear' : 'solid'}
+                            disabled={this.state.booked}
                             onPress={this.onPressSubmit}
                             loading={this.state.loading}
                         />

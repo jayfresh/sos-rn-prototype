@@ -80,6 +80,10 @@ export default class HomeScreen extends React.Component {
         userList: list
     };
     componentDidMount() {
+        // TODO: I think I need to move to use React Navigation focus on all these main tab screens
+        // as they all get re-mounted after navigating off them
+        // consequence is the listeners are re-added when the screen is not visible
+        console.log('HomeScreen did mount');
         this.unsubscribe = db.collection('users').orderBy('firstname')
         .onSnapshot(querySnapshot => {
             list = [];
@@ -93,6 +97,7 @@ export default class HomeScreen extends React.Component {
         });
     }
     componentWillUnmount() {
+        console.log('HomeScreen will unmount');
         this.unsubscribe && this.unsubscribe();
     }
     render() {

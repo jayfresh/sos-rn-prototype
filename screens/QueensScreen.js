@@ -13,14 +13,15 @@ export default class QueensScreen extends React.Component {
         classList: [],
         bookings: []
     };
-    // Note: may need to use componentWillFocus / componentWillBlur as with BossScreen
+    // Note: may need to use onComponentFocus / onComponentBlur as with BossScreen
     componentDidMount() {
+        console.log('QueenScreen did mount');
         this.unsubscribe = db.collection('classes').orderBy('startTime')
         .onSnapshot(querySnapshot => {
             const list = [];
             querySnapshot.forEach((doc) => {
                 console.log(`${doc.id} => ${JSON.stringify(doc.data())}`);
-                list.push(doc.data());
+                list.push(Object.assign(doc.data(), {id: doc.id}));
             });
             const myList = list.filter(c => c.bookings && c.bookings.includes(this.state.userID));
             this.setState({
@@ -30,6 +31,7 @@ export default class QueensScreen extends React.Component {
         });
     }
     componentWillUnmount() {
+        console.log('QueenScreen will unmount');
         this.unsubscribe && this.unsubscribe();
     }
     render() {
@@ -45,8 +47,6 @@ export default class QueensScreen extends React.Component {
                             key={i}
                             title={c.name + ' @ ' + c.location}
                             subtitle={formatDate(c.startTime) + ' / ' + c.duration + ' minutes'}
-                            bottomDivider
-                            onPress={() => this.props.navigation.navigate('ClassDetail')}
                         />
                     ))}
                     { this.state.bookings && this.state.bookings.length === 0 && <Text style={[commonStyles.bodyText, {marginVertical: 20}]}>No bookings</Text> }
@@ -64,10 +64,10 @@ export default class QueensScreen extends React.Component {
                             subtitle={formatDate(c.startTime) + ' / ' + c.duration + ' minutes'}
                             bottomDivider
                             chevron
-                            onPress={() => this.props.navigation.navigate('ClassDetail')}
+                            onPress={() => this.props.navigation.navigate('ClassDetail', {class: c})}
                         />
                     ))}
-                    { this.state.classList && this.state.classList.length === 0 && <Text>No classes</Text> }
+                    { this.state.classList && this.state.classList.length === 0 && <Text style={[commonStyles.bodyText, {marginVertical: 20}]}>No classes</Text> }
                 </View>
             </ScrollView>
         );
