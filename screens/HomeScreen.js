@@ -80,7 +80,7 @@ export default class HomeScreen extends React.Component {
         userList: list
     };
     componentDidMount() {
-        this.unsubscribe = db.collection('users')
+        this.unsubscribe = db.collection('users').orderBy('firstname')
         .onSnapshot(querySnapshot => {
             list = [];
             querySnapshot.forEach((doc) => {
