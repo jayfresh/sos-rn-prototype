@@ -8,7 +8,7 @@ import NewTeacherScreen from '../screens/NewTeacherScreen';
 import NewClassScreen from '../screens/NewClassScreen';
 import BossScreen from '../screens/BossScreen';
 import QueensScreen from '../screens/QueensScreen';
-import SettingsScreen from '../screens/SettingsScreen';
+import ClassDetailScreen from '../screens/ClassDetailScreen';
 
 const config = Platform.select({
   web: { headerMode: 'screen' },
@@ -55,6 +55,7 @@ BossStack.path = '';
 const QueensStack = createStackNavigator(
   {
       Queens: QueensScreen,
+      ClassDetail: ClassDetailScreen
   },
   config
 );

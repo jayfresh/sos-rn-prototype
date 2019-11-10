@@ -6,16 +6,7 @@ import { Divider, ListItem } from 'react-native-elements';
 import { db } from '../config';
 import AddItem from '../components/AddItem';
 import commonStyles from '../common/styles';
-
-const moment = require('moment-timezone');
-
-const formatDate = d => {
-    let out = moment(d);
-    if (!out.isValid() && d.seconds) {
-        out = moment.unix(d.seconds);
-    }
-    return out.format('HH:mm Do MMM');
-};
+import { formatDate } from '../common/utilities';
 
 export default class BossScreen extends React.Component {
     unsubscribe = null;
@@ -61,7 +52,7 @@ export default class BossScreen extends React.Component {
                             bottomDivider
                         />
                     ))}
-                    { this.state.userList && this.state.userList.length === 0 && <Text>No teachers</Text> }
+                    { this.state.classList && this.state.classList.length === 0 && <Text>No teachers</Text> }
                 </View>
             </ScrollView>
         );
