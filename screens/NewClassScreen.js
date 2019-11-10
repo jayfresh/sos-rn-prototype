@@ -1,16 +1,25 @@
 import React from 'react';
 import { View, ScrollView } from 'react-native';
 import { Button, Input, Overlay, Text, ThemeProvider } from 'react-native-elements';
+import { Calendar } from 'react-native-calendars';
 
 import { db } from '../config';
 import commonStyles from '../common/styles';
 import theme from '../common/theme';
 
+const moment = require('moment-timezone');
+
 const addClass = function(data) {
+    // make a datetime and duration from the date and time components
+    const DATE_FORMAT = 'YYYY-MM-DD HH:mm';
+    const startTime = moment(data.selectedDate + ' ' + data.startTime, DATE_FORMAT);
+    const endTime = moment(data.selectedDate + ' ' + data.endTime, DATE_FORMAT);
+    const duration = endTime.diff(startTime, 'minutes');
     return db.collection('classes').add({
         name: data.name,
         location: data.location,
-        datetime: data.datetime,
+        startTime: startTime.toDate(),
+        duration: duration,
         instructor: 'TESTID',
         weeklyRecurring: true
     })
@@ -27,23 +36,24 @@ export default class NewClassScreen extends React.Component {
         loading: false,
         name: '',
         location: '',
-        datetime: ''
+        selectedDate: null,
+        startTime: '',
+        endTime: ''
     };
     clearForm = () => {
         this.setState({
             name: '',
             location: '',
-            datetime: ''
+            datetime: '',
+            selectedDate: null,
+            startTime: '',
+            endTime: ''
         });
     };
     onPressSubmit = () => {
         this.setState({loading: true});
         // save to Firebase
-        addClass({
-            name: this.state.name,
-            location: this.state.location,
-            datetime: this.state.datetime
-        })
+        addClass(this.state)
         .then(_ => {
             this.clearForm();
             this.setState({
@@ -102,11 +112,33 @@ export default class NewClassScreen extends React.Component {
                             value={this.state.location}
                             onChangeText={text => this.setState({location: text})}
                         />
+                        <Calendar
+                            // Minimum date that can be selected, dates before minDate will be grayed out. Default = undefined
+                            minDate={Date()}
+                            // Marked dates affects which date shows up as selected on the calendar
+                            markedDates={{ [this.state.selectedDate]: { selected: true } }}
+                            // Handler which gets executed on day press. Default = undefined
+                            onDayPress={day => { this.setState({selectedDate: day.dateString}); }}
+                            // Month format in calendar title. Formatting values: http://arshaw.com/xdate/#Formatting
+                            monthFormat={'MMM yyyy'}
+                            // If firstDay=1 week starts from Monday. Note that dayNames and dayNamesShort should still start from Sunday.
+                            firstDay={1}
+                            // Handler which gets executed when press arrow icon left. It receive a callback can go back month
+                            onPressArrowLeft={subtractMonth => subtractMonth()}
+                            // Handler which gets executed when press arrow icon right. It receive a callback can go next month
+                            onPressArrowRight={addMonth => addMonth()}
+                        />
                         <Input
-                            label='Date and time'
-                            placeholder='05/01/2020 18:30'
-                            value={this.state.datetime}
-                            onChangeText={text => this.setState({datetime: text})}
+                            label='Start time'
+                            placeholder='18:30'
+                            value={this.state.startTime}
+                            onChangeText={text => this.setState({startTime: text})}
+                        />
+                        <Input
+                            label='End time'
+                            placeholder='19:30'
+                            value={this.state.endTime}
+                            onChangeText={text => this.setState({endTime: text})}
                         />
                         <Button
                             title="Submit"
