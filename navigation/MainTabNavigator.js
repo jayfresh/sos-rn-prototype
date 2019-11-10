@@ -72,6 +72,8 @@ const tabNavigator = createBottomTabNavigator({
   HomeStack,
   BossStack,
   QueensStack,
+}, {
+    resetOnBlur: true
 });
 
 tabNavigator.path = '';

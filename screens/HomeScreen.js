@@ -133,6 +133,9 @@ export default class HomeScreen extends React.Component {
                                 title={l.firstname + ' ' + l.lastname}
                                 subtitle={l.email}
                                 bottomDivider
+                                onPress={_ => {
+                                    this.props.navigation.navigate('Boss', {userEmail: l.email});
+                                }}
                             />
                         ))}
                         { this.state.userList && this.state.userList.length === 0 && <Text>No teachers</Text> }

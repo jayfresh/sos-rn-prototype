@@ -1,5 +1,6 @@
 import React from 'react';
 import { View, ScrollView, Text } from 'react-native';
+import { NavigationEvents } from 'react-navigation';
 import { Divider, ListItem } from 'react-native-elements';
 
 import { db } from '../config';
@@ -21,7 +22,9 @@ export default class BossScreen extends React.Component {
     state = {
         classList: null
     };
-    componentDidMount() {
+    onComponentFocus() {
+        const userEmail = this.props.navigation.getParam('userEmail', '');
+        console.log('userEmail param:', userEmail);
         this.unsubscribe = db.collection('classes').orderBy('startTime')
         .onSnapshot(querySnapshot => {
             list = [];
@@ -34,12 +37,16 @@ export default class BossScreen extends React.Component {
             });
         });
     }
-    componentWillUnmount() {
+    onComponentBlur() {
         this.unsubscribe && this.unsubscribe();
     }
     render() {
         return (
             <ScrollView style={commonStyles.container}>
+                <NavigationEvents
+                    onWillFocus={_ => this.onComponentFocus()}
+                    onWillBlur={_ => this.onComponentBlur()}
+                />
                 <AddItem text='Add a class' onPress={() => this.onPress()} />
                 <View>
                     <Text style={commonStyles.headingText}>My classes</Text>
