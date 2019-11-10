@@ -98,7 +98,7 @@ export default class NewClassScreen extends React.Component {
                     )
                 }
                 <View>
-                    <Text style={commonStyles.headingText}>Use this screen to add a new class</Text>
+                    <Text h3 style={[commonStyles.headingText, {marginBottom: 20}]}>Add a new class</Text>
                     <ThemeProvider theme={theme}>
                         <Input
                             label='Class name'

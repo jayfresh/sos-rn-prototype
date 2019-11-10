@@ -87,7 +87,7 @@ export default class NewTeacherScreen extends React.Component {
                     )
                 }
                 <View>
-                    <Text h3 style={[commonStyles.headingText, {marginBottom: 20}]}>Use this screen to add a new teacher</Text>
+                    <Text h3 style={[commonStyles.headingText, {marginBottom: 20}]}>Add a new teacher</Text>
                     <ThemeProvider theme={theme}>
                         <Input
                             label='First name'
