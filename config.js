@@ -52,4 +52,6 @@ if (Platform.OS === 'android') {
     };
 }
 
-export const db = firebase.firestore();
+const db = firebase.firestore();
+
+export {db, firebase};

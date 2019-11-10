@@ -7,6 +7,9 @@ export default StyleSheet.create({
     flex: 1,
     backgroundColor: '#fff',
   },
+  bodyText: {
+      marginLeft: 15
+  },
   headingText: {
     fontSize: 16,
     marginLeft: 15,

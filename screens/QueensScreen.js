@@ -1,29 +1,31 @@
 import React from 'react';
-import { View, Text, ScrollView } from 'react-native';
-import { Divider, ListItem } from 'react-native-elements';
+import { View, ScrollView } from 'react-native';
+import { Divider, ListItem, Text } from 'react-native-elements';
 
 import { db } from '../config';
 import commonStyles from '../common/styles';
 import { formatDate } from '../common/utilities';
 
-let list = null;
-
 export default class QueensScreen extends React.Component {
     unsubscribe = null;
     state = {
-        classList: list
+        userID: 'testUserID',
+        classList: [],
+        bookings: []
     };
     // Note: may need to use componentWillFocus / componentWillBlur as with BossScreen
     componentDidMount() {
         this.unsubscribe = db.collection('classes').orderBy('startTime')
         .onSnapshot(querySnapshot => {
-            list = [];
+            const list = [];
             querySnapshot.forEach((doc) => {
                 console.log(`${doc.id} => ${JSON.stringify(doc.data())}`);
                 list.push(doc.data());
             });
+            const myList = list.filter(c => c.bookings && c.bookings.includes(this.state.userID));
             this.setState({
-                classList: list
+                classList: list,
+                bookings: myList
             });
         });
     }
@@ -34,7 +36,24 @@ export default class QueensScreen extends React.Component {
         return (
             <ScrollView style={commonStyles.container}>
                 <View>
-                    <Text style={commonStyles.headingText}>Classes</Text>
+                    <Text h4 style={commonStyles.headingText}>My bookings</Text>
+                </View>
+                <Divider />
+                <View>
+                    { this.state.bookings && this.state.bookings.map((c, i) => (
+                        <ListItem
+                            key={i}
+                            title={c.name + ' @ ' + c.location}
+                            subtitle={formatDate(c.startTime) + ' / ' + c.duration + ' minutes'}
+                            bottomDivider
+                            onPress={() => this.props.navigation.navigate('ClassDetail')}
+                        />
+                    ))}
+                    { this.state.bookings && this.state.bookings.length === 0 && <Text style={[commonStyles.bodyText, {marginVertical: 20}]}>No bookings</Text> }
+                </View>
+                <Divider />
+                <View>
+                    <Text h4 style={commonStyles.headingText}>All classes</Text>
                 </View>
                 <Divider />
                 <View>

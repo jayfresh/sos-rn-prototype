@@ -1,18 +1,37 @@
 import React from 'react';
 import { View, ScrollView } from 'react-native';
 import { Button, Input, Overlay, Text, ThemeProvider } from 'react-native-elements';
-import { Calendar } from 'react-native-calendars';
 
-import { db } from '../config';
+import { db, firebase } from '../config';
 import commonStyles from '../common/styles';
 import theme from '../common/theme';
 
 export default class ClassDetailScreen extends React.Component {
     state = {
+        userID: 'testUserID',
         successOverlayVisible: false,
-        className: 'test class'
+        classID: '5PnhbRWeVu2KysBZoyDQ',
+        className: 'test class',
+        classDuration: '45 minutes',
+        classLocation: '1 Summerfield Place, Abercrombie, S1 4LT'
     };
-    onPressSubmit = () => {};
+    onPressSubmit = () => {
+        // update the class in the database with the customer ID
+        var classRef = db.collection('classes').doc(this.state.classID);
+        return classRef.update({
+            bookings: firebase.firestore.FieldValue.arrayUnion(this.state.userID)
+        })
+        .then(() => {
+            console.log('Booking added');
+            this.setState({
+                successOverlayVisible: true
+            });
+        })
+        .catch(error => {
+            // The document probably doesn't exist.
+            console.error('Error adding booking', error);
+        });
+    };
     backButtonPress = () => {
         this.props.navigation.goBack();
     };
@@ -38,11 +57,15 @@ export default class ClassDetailScreen extends React.Component {
                 }
                 <View>
                     <Text h3 style={[commonStyles.headingText, {marginBottom: 20}]}>{this.state.className}</Text>
-                    <Button
-                        title="Submit"
-                        onPress={this.onPressSubmit}
-                        loading={this.state.loading}
-                    />
+                    <Text style={commonStyles.bodyText}>{this.state.classDuration}</Text>
+                    <Text style={commonStyles.bodyText}>{this.state.classLocation}</Text>
+                    <ThemeProvider theme={theme}>
+                        <Button
+                            title='Book class'
+                            onPress={this.onPressSubmit}
+                            loading={this.state.loading}
+                        />
+                    </ThemeProvider>
                 </View>
             </ScrollView>
         );
