@@ -1,200 +1,69 @@
 import React from 'react';
-import { View, ScrollView, Text, SectionList, StyleSheet } from 'react-native';
-import Constants from 'expo-constants';
+import { View, ScrollView, Text } from 'react-native';
+import { Divider, ListItem } from 'react-native-elements';
 
+import { db } from '../config';
 import AddItem from '../components/AddItem';
 import commonStyles from '../common/styles';
 
-export default class BossScreen extends React.Component {
-  render() {
-    const { manifest = {} } = Constants;
-    const sections = [
-      { data: [{ value: manifest.sdkVersion }], title: 'sdkVersion' },
-      { data: [{ value: manifest.privacy }], title: 'privacy' },
-      { data: [{ value: manifest.version }], title: 'version' },
-      { data: [{ value: manifest.orientation }], title: 'orientation' },
-      {
-        data: [{ value: manifest.primaryColor, type: 'color' }],
-        title: 'primaryColor',
-      },
-      {
-        data: [{ value: manifest.splash && manifest.splash.image }],
-        title: 'splash.image',
-      },
-      {
-        data: [
-          {
-            value: manifest.splash && manifest.splash.backgroundColor,
-            type: 'color',
-          },
-        ],
-        title: 'splash.backgroundColor',
-      },
-      {
-        data: [
-          {
-            value: manifest.splash && manifest.splash.resizeMode,
-          },
-        ],
-        title: 'splash.resizeMode',
-      },
-      {
-        data: [
-          {
-            value: manifest.ios && manifest.ios.supportsTablet ? 'true' : 'false',
-          },
-        ],
-        title: 'ios.supportsTablet',
-      },
-    ];
-    return (
-        <ScrollView style={commonStyles.container}>
-            <AddItem text='Add a class' onPress={() => this.onPress()} />
-            <View>
-                <Text style={commonStyles.headingText}>My classes</Text>
-            </View>
-            <SectionList
-                style={commonStyles.container}
-                renderItem={this._renderItem}
-                renderSectionHeader={this._renderSectionHeader}
-                stickySectionHeadersEnabled={true}
-                keyExtractor={(item, index) => index}
-                ListHeaderComponent={ListHeader}
-                sections={sections}
-            />
-        </ScrollView>
-    );
-  }
+const moment = require('moment-timezone');
 
-  onPress() {
-      this.props.navigation.navigate('NewClass');
-  }
-
-  _renderSectionHeader = ({ section }) => {
-    return <SectionHeader title={section.title} />;
-  };
-
-  _renderItem = ({ item }) => {
-    if (item.type === 'color') {
-      return <SectionContent>{item.value && <Color value={item.value} />}</SectionContent>;
-    } else {
-      return (
-        <SectionContent>
-          <Text style={styles.sectionContentText}>{item.value}</Text>
-        </SectionContent>
-      );
+const formatDate = d => {
+    let out = moment(d);
+    if (!out.isValid() && d.seconds) {
+        out = moment.unix(d.seconds);
     }
-  };
+    return out.format('HH:mm Do MMM');
+};
+
+export default class BossScreen extends React.Component {
+    unsubscribe = null;
+    state = {
+        classList: null
+    };
+    componentDidMount() {
+        this.unsubscribe = db.collection('classes').orderBy('startTime')
+        .onSnapshot(querySnapshot => {
+            list = [];
+            querySnapshot.forEach((doc) => {
+                console.log(`${doc.id} => ${JSON.stringify(doc.data())}`);
+                list.push(doc.data());
+            });
+            this.setState({
+                classList: list
+            });
+        });
+    }
+    componentWillUnmount() {
+        this.unsubscribe && this.unsubscribe();
+    }
+    render() {
+        return (
+            <ScrollView style={commonStyles.container}>
+                <AddItem text='Add a class' onPress={() => this.onPress()} />
+                <View>
+                    <Text style={commonStyles.headingText}>My classes</Text>
+                </View>
+                <Divider />
+                <View>
+                    { this.state.classList && this.state.classList.map((c, i) => (
+                        <ListItem
+                            key={i}
+                            title={c.name + ' @ ' + c.location}
+                            subtitle={formatDate(c.startTime) + ' / ' + c.duration + ' minutes'}
+                            bottomDivider
+                        />
+                    ))}
+                    { this.state.userList && this.state.userList.length === 0 && <Text>No teachers</Text> }
+                </View>
+            </ScrollView>
+        );
+    }
+    onPress() {
+        this.props.navigation.navigate('NewClass');
+    }
 }
 
 BossScreen.navigationOptions = {
-  title: 'Boss',
+    title: 'Boss',
 };
-
-const ListHeader = () => {
-  const { manifest } = Constants;
-
-  return (
-    <View style={styles.titleContainer}>
-      <View style={styles.titleTextContainer}>
-        <Text style={styles.nameText} numberOfLines={1}>
-          {manifest.name}
-        </Text>
-
-        <Text style={styles.slugText} numberOfLines={1}>
-          {manifest.slug}
-        </Text>
-
-        <Text style={styles.descriptionText}>{manifest.description}</Text>
-      </View>
-    </View>
-  );
-};
-
-const SectionHeader = ({ title }) => {
-  return (
-    <View style={styles.sectionHeaderContainer}>
-      <Text style={styles.sectionHeaderText}>{title}</Text>
-    </View>
-  );
-};
-
-const SectionContent = props => {
-  return <View style={styles.sectionContentContainer}>{props.children}</View>;
-};
-
-const Color = ({ value }) => {
-  if (!value) {
-    return <View />;
-  } else {
-    return (
-      <View style={styles.colorContainer}>
-        <View style={[styles.colorPreview, { backgroundColor: value }]} />
-        <View style={styles.colorTextContainer}>
-          <Text style={styles.sectionContentText}>{value}</Text>
-        </View>
-      </View>
-    );
-  }
-};
-
-const styles = StyleSheet.create({
-  titleContainer: {
-    paddingHorizontal: 15,
-    paddingTop: 15,
-    paddingBottom: 15,
-    flexDirection: 'row',
-  },
-  titleIconContainer: {
-    marginRight: 15,
-    paddingTop: 2,
-  },
-  sectionHeaderContainer: {
-    backgroundColor: '#fbfbfb',
-    paddingVertical: 8,
-    paddingHorizontal: 15,
-    borderWidth: StyleSheet.hairlineWidth,
-    borderColor: '#ededed',
-  },
-  sectionHeaderText: {
-    fontSize: 14,
-  },
-  sectionContentContainer: {
-    paddingTop: 8,
-    paddingBottom: 12,
-    paddingHorizontal: 15,
-  },
-  sectionContentText: {
-    color: '#808080',
-    fontSize: 14,
-  },
-  nameText: {
-    fontWeight: '600',
-    fontSize: 18,
-  },
-  slugText: {
-    color: '#a39f9f',
-    fontSize: 14,
-    backgroundColor: 'transparent',
-  },
-  descriptionText: {
-    fontSize: 14,
-    marginTop: 6,
-    color: '#4d4d4d',
-  },
-  colorContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-  },
-  colorPreview: {
-    width: 17,
-    height: 17,
-    borderRadius: 2,
-    marginRight: 6,
-    borderWidth: StyleSheet.hairlineWidth,
-    borderColor: '#ccc',
-  },
-  colorTextContainer: {
-    flex: 1,
-  },
-});
