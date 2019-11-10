@@ -24,4 +24,10 @@ export default StyleSheet.create({
     fontSize: 14,
     color: '#2e78b7',
   },
+  overlayH3Text: {
+      marginBottom: 40
+  },
+  overlayButton: {
+      marginVertical: 20
+  }
 });

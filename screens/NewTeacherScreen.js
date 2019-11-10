@@ -4,20 +4,7 @@ import { Button, Input, Overlay, Text, ThemeProvider } from 'react-native-elemen
 
 import { db } from '../config';
 import commonStyles from '../common/styles';
-
-const theme = {
-    Input: {
-        containerStyle: {
-            marginBottom: 20
-        }
-    },
-    Button: {
-        containerStyle: {
-            paddingHorizontal: 50,
-            paddingVertical: 20
-        }
-    }
-};
+import theme from '../common/styles';
 
 const addUser = function(data) {
     return db.collection('users').add({
@@ -34,24 +21,19 @@ const addUser = function(data) {
 };
 
 export default class NewTeacherScreen extends React.Component {
-    constructor(props) {
-        super(props);
-        this.input1Ref = React.createRef();
-        this.input2Ref = React.createRef();
-        this.input3Ref = React.createRef();
-    }
     state = {
         loading: false,
         firstname: '',
-        firstname2: '',
         lastname: '',
         email: '',
         successOverlayVisible: false
     };
     clearForm = () => {
-        this.input1Ref.current.clear();
-        this.input2Ref.current.clear();
-        this.input3Ref.current.clear();
+        this.setState({
+            firstname: '',
+            lastname: '',
+            email: ''
+        });
     };
     onPressSubmit = () => {
         this.setState({loading: true});
@@ -88,17 +70,17 @@ export default class NewTeacherScreen extends React.Component {
                             onBackdropPress={() => this.setState({ successOverlayVisible: false })}
                         >
                             <View style={{flex: 1, justifyContent: 'center'}}>
-                                <Text h3 style={{marginBottom: 40}}>Teacher added!</Text>
+                                <Text h3 style={commonStyles.overlayH3Text}>Teacher added!</Text>
                                 <Button
                                     title='Back to admin'
                                     onPress={this.backToAdminPress}
-                                    containerStyle={{marginVertical: 20}}
+                                    containerStyle={commonStyles.overlayButton}
                                 />
                                 <Button
                                     title='Add more'
                                     type='outline'
                                     onPress={this.addMoreButtonPress}
-                                    containerStyle={{marginVertical: 20}}
+                                    containerStyle={commonStyles.overlayButton}
                                 />
                             </View>
                         </Overlay>
@@ -110,14 +92,12 @@ export default class NewTeacherScreen extends React.Component {
                         <Input
                             label='First name'
                             placeholder='Beyoncé'
-                            ref={this.input1Ref}
                             value={this.state.firstname}
                             onChangeText={text => this.setState({firstname: text})}
                         />
                         <Input
                             label='Last name'
                             placeholder='Knowles'
-                            ref={this.input2Ref}
                             value={this.state.lastname}
                             onChangeText={text => this.setState({lastname: text})}
                         />
@@ -125,7 +105,6 @@ export default class NewTeacherScreen extends React.Component {
                             label='Email address'
                             placeholder='queen@beyonceknowles.com'
                             rightIcon={{ name: 'email', type: 'material' }}
-                            ref={this.input3Ref}
                             value={this.state.email}
                             keyboardType='email-address'
                             onBlur={() => this.setState({email: this.state.email.toLowerCase()})}
