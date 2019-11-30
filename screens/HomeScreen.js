@@ -27,6 +27,21 @@ firebase.auth().onAuthStateChanged(user => {
 });
 
 class LoginContainer extends React.Component {
+    _updateLoginStatus = function () {
+        const user = firebase.auth().currentUser;
+        console.log('firebase user', user);
+        if (user != null) {
+            this.props.setParentState({
+                loggedIn: true,
+                givenName: user.displayName,
+                picture: user.photoURL
+            });
+        }
+    };
+    componentWillMount() {
+        console.log('Login button will mount');
+        this._updateLoginStatus();
+    }
     _loginWithFacebook = async function () {
         const result = await Facebook.logInWithReadPermissionsAsync(
             facebookConfig.appId,
@@ -44,26 +59,34 @@ class LoginContainer extends React.Component {
             // Sign in with credential from the Facebook user.
             firebase.auth().signInWithCredential(credential)
             .then(_ => {
-                const user = firebase.auth().currentUser;
-                console.log('firebase user', user);
-                this.props.setParentState({
-                    loggedIn: true,
-                    givenName: user.displayName,
-                    picture: user.photoURL
-                });
+                this._updateLoginStatus();
             })
             .catch(error => {
                 console.log('error', error);
             });
         }
     };
+    _logoutFromFirebase = async function() {
+        firebase.auth().signOut();
+        this.props.setParentState({
+            loggedIn: false,
+            givenName: null,
+            picture: null
+        });
+    };
 
     render() {
         return (
-            <Button
-                title='Login'
-                onPress={() => this._loginWithFacebook()}
-            />
+            <View style={{display: 'flex', flexDirection: 'row'}}>
+                <Button
+                    title='Login'
+                    onPress={() => this._loginWithFacebook()}
+                />
+                <Button
+                    title='Logout'
+                    onPress={() => this._logoutFromFirebase()}
+                />
+            </View>
         );
     }
 }
@@ -91,7 +114,7 @@ export default class HomeScreen extends React.Component {
             this.setState({
                 userList: list
             });
-        });
+        }, error => console.log(error));
     }
     componentWillUnmount() {
         console.log('HomeScreen will unmount');
