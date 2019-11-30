@@ -3,36 +3,35 @@
 * path: '/environment.js' (root of your project)
 ******************************/
 
-import { Constants } from "expo";
-import { Platform } from "react-native";
+import { Constants } from 'expo';
+import { Platform } from 'react-native';
 
-const firebaseConfig = {
-    apiKey: "XXX",
-    authDomain: "XXX",
-    databaseURL: "XXX",
-    projectId: "XXX",
-    storageBucket: "XXX",
-    messagingSenderId: "XXX",
-    appId: "XXX",
+const facebookConfig = {
+    appId: 'XXX'
 };
 
-const auth0Config = {
-    auth0Domain: 'XXX',
-    auth0ClientId: 'XXX'
+const firebaseConfig = {
+    apiKey: 'XXX',
+    authDomain: 'XXX',
+    databaseURL: 'XXX',
+    projectId: 'XXX',
+    storageBucket: 'XXX',
+    messagingSenderId: 'XXX',
+    appId: 'XXX',
 };
 
 const ENV = {
     dev: {
-        firebaseConfig: firebaseConfig,
-        auth0Config: auth0Config
+        facebookConfig: facebookConfig,
+        firebaseConfig: firebaseConfig
     },
     staging: {
-        firebaseConfig: firebaseConfig,
-        auth0Config: auth0Config
+        facebookConfig: facebookConfig,
+        firebaseConfig: firebaseConfig
     },
     prod: {
-        firebaseConfig: firebaseConfig,
-        auth0Config: auth0Config
+        facebookConfig: facebookConfig,
+        firebaseConfig: firebaseConfig
     }
 };
 

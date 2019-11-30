@@ -7,56 +7,53 @@ import {
   Text,
   View,
 } from 'react-native';
-import { AuthSession } from 'expo';
+import * as Facebook from 'expo-facebook';
 import { Avatar, Button, Divider, ListItem } from 'react-native-elements';
 
-import { db } from '../config';
+import { db, firebase } from '../config';
 import commonStyles from '../common/styles';
 import AddItem from '../components/AddItem';
 
 import getEnvVars from '../environment';
-const { auth0Config: {auth0Domain, auth0ClientId} } = getEnvVars();
+const { facebookConfig } = getEnvVars();
 
 let list = null;
 
-const toQueryString = (obj) => {
-    return '?' + Object.keys(obj)
-    .map(key => key + '=' + encodeURIComponent(obj[key]))
-    .join('&');
-}
+// Listen for authentication state to change.
+firebase.auth().onAuthStateChanged(user => {
+  if (user != null) {
+    console.log('We are authenticated now!');
+  }
+});
 
-class Auth0LoginContainer extends React.Component {
-    _loginWithAuth0 = async () => {
-        const redirectUrl = AuthSession.getRedirectUrl();
-        let authUrl = `https://${auth0Domain}/authorize` + toQueryString({
-            client_id: auth0ClientId,
-            response_type: 'token',
-            scope: 'openid profile email',
-            redirect_uri: redirectUrl
-        });
-        console.log(`Redirect URL (add this to Auth0): ${redirectUrl}`);
-        console.log(`AuthURL is:  ${authUrl}`);
-        const result = await AuthSession.startAsync({
-            authUrl: authUrl
-        });
+class LoginContainer extends React.Component {
+    _loginWithFacebook = async function () {
+        const result = await Facebook.logInWithReadPermissionsAsync(
+            facebookConfig.appId,
+            { permissions: ['public_profile'] }
+        );
+        console.log(result);
 
-        if (result.type === 'success') {
-            console.log(result);
-            let token = result.params.access_token;
-            fetch(`https://${auth0Domain}/userinfo`, {
-                method: 'GET',
-                headers: {
-                    Authorization: `Bearer ${token}`
-                }
-            })
-            .then(response => response.json())
-            .then(userinfoResult => {
-                console.log(userinfoResult);
+        const {type, token} = result;
+
+        if (type === 'success') {
+            // Build Firebase credential with the Facebook access token.
+            const credential = firebase.auth.FacebookAuthProvider.credential(token);
+            console.log('credential', credential);
+
+            // Sign in with credential from the Facebook user.
+            firebase.auth().signInWithCredential(credential)
+            .then(_ => {
+                const user = firebase.auth().currentUser;
+                console.log('firebase user', user);
                 this.props.setParentState({
                     loggedIn: true,
-                    givenName: userinfoResult.given_name,
-                    picture: userinfoResult.picture
+                    givenName: user.displayName,
+                    picture: user.photoURL
                 });
+            })
+            .catch(error => {
+                console.log('error', error);
             });
         }
     };
@@ -65,7 +62,7 @@ class Auth0LoginContainer extends React.Component {
         return (
             <Button
                 title='Login'
-                onPress={() => this._loginWithAuth0()}
+                onPress={() => this._loginWithFacebook()}
             />
         );
     }
@@ -114,7 +111,7 @@ export default class HomeScreen extends React.Component {
                     </View>
                     <View style={styles.getStartedContainer}>
                         <AddItem text='Add a teacher' onPress={() => this.onPress() } />
-                        <Auth0LoginContainer setParentState={state => this.setState(state)} />
+                        <LoginContainer setParentState={state => this.setState(state)} />
                         { this.state.loggedIn && (
                             <View style={{display: 'flex', flexDirection: 'row'}}>
                                 <Avatar
