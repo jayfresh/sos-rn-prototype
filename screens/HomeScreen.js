@@ -67,7 +67,7 @@ export default class HomeScreen extends React.Component {
                                 subtitle={l.email}
                                 bottomDivider
                                 onPress={_ => {
-                                    this.props.navigation.navigate('Boss', {userEmail: l.email});
+                                    this.props.navigation.navigate('Boss', {userEmail: l.email, userUID: l.linkedUID});
                                 }}
                             />
                         ))}

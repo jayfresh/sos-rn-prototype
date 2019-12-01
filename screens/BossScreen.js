@@ -3,7 +3,7 @@ import { View, ScrollView, Text } from 'react-native';
 import { NavigationEvents } from 'react-navigation';
 import { Divider, ListItem } from 'react-native-elements';
 
-import { db } from '../config';
+import { db, firebase } from '../config';
 import AddItem from '../components/AddItem';
 import commonStyles from '../common/styles';
 import { formatDate } from '../common/utilities';
@@ -11,12 +11,19 @@ import { formatDate } from '../common/utilities';
 export default class BossScreen extends React.Component {
     unsubscribe = null;
     state = {
-        classList: null
+        classList: null,
+        userEmail: null,
+        userUID: null
     };
     onComponentFocus() {
-        const userEmail = this.props.navigation.getParam('userEmail', '');
+        const userEmail = this.props.navigation.getParam('userEmail', null) || (firebase.auth().currentUser && firebase.auth().currentUser.email);
+        const userUID = this.props.navigation.getParam('userUID', null) || (firebase.auth().currentUser && firebase.auth().currentUser.uid);
         console.log('BossScreen userEmail param:', userEmail);
-        this.unsubscribe = db.collection('classes').orderBy('startTime')
+        this.setState({userEmail, userUID});
+
+        this.unsubscribe = db.collection('classes')
+        .where('instructor', '==', userUID)
+        .orderBy('startTime')
         .onSnapshot(querySnapshot => {
             list = [];
             querySnapshot.forEach((doc) => {
@@ -51,7 +58,7 @@ export default class BossScreen extends React.Component {
                 />
                 <AddItem text='Add a class' onPress={() => this.onPress()} />
                 <View>
-                    <Text style={commonStyles.headingText}>My classes</Text>
+                    <Text style={commonStyles.headingText}>My classes{ this.state.userEmail ? ' (' + this.state.userEmail + ')' : ''}</Text>
                 </View>
                 <Divider />
                 <View>
