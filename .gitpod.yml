@@ -3,5 +3,5 @@ image:
 ports:
   - port: 19000-19002
 tasks:
-  - before: npm install
-    command: npm start
+  - before: npm install && npm install -g firebase-tools
+    command: expo login && npm start
