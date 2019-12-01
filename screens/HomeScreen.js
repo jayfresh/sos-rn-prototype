@@ -45,7 +45,7 @@ class LoginContainer extends React.Component {
     _loginWithFacebook = async function () {
         const result = await Facebook.logInWithReadPermissionsAsync(
             facebookConfig.appId,
-            { permissions: ['public_profile'] }
+            { permissions: ['public_profile', 'email'] }
         );
         console.log(result);
 
