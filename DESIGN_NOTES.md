@@ -52,3 +52,8 @@ in the firestripe sample app - https://github.com/firebase/functions-samples/blo
   * when the checkout is completed, a Stripe webhook can hit a firebase function, that can update the booking and (potentially) the client can pick up on this
   to terminate the checkout page...
     * this is an example of using the `WebBrowser` module to open up a modal web browser and then detect when that is redirected back to the app - https://github.com/expo/examples/blob/master/with-webbrowser-redirect/app/App.js
+    * an issue is that the Stripe SDK is not available for Expo apps, so I think I'll have to go with the WebView method shown in the Medium article linked above
+
+### Test card details
+
+See this page, at the bottom: https://stripe.com/docs/payments/save-and-reuse
