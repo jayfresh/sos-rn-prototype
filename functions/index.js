@@ -10,6 +10,7 @@ exports.linkUser = functions.auth.user().onCreate(user => {
   console.log(user);
   var email = user.email;
   var uid = user.uid;
+  var photoURL = user.photoURL;
   console.log('email', email);
   var db = admin.firestore();
   if (email) {
@@ -19,11 +20,12 @@ exports.linkUser = functions.auth.user().onCreate(user => {
         console.log(querySnapshot);
         var promises = [];
         querySnapshot.forEach(doc => {
-            console.log(doc.id, " => ", doc.data());
+            console.log(doc.id, ' => ', doc.data());
             // Build doc ref from doc.id
             var docRef = db.collection('users').doc(doc.id);
             promises.push(docRef.update({
-                linkedUID: uid
+                linkedUID: uid,
+                photoURL: photoURL
             }));
         });
         return Promise.all(promises).then(_ => console.log('success'));

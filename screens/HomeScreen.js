@@ -62,7 +62,7 @@ export default class HomeScreen extends React.Component {
                         { this.state.userList && this.state.userList.map((l, i) => (
                             <ListItem
                                 key={i}
-                                leftAvatar={{ source: { uri: l.picture } }}
+                                leftAvatar={{ source: { uri: l.photoURL } }}
                                 title={l.firstname + ' ' + l.lastname}
                                 subtitle={l.email}
                                 bottomDivider
