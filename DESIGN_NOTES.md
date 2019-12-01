@@ -40,6 +40,15 @@ Options include:
 
 * collecting card details in a form, and then tokenizing the card using the Stripe APIs - see `submitNewCreditCard`
 in the firestripe sample app - https://github.com/firebase/functions-samples/blob/master/stripe/public/index.html
+  * this approach choreographs the client creating entries in firestore, firebase functions responding to those to make
+  calls to Stripe, the server subsequently creating further entries in firestore, and these then having an effect on the client
 * using a webview to host the Stripe checkout pages - see this article: https://medium.com/front-end-weekly/how-to-use-stripe-checkout-javascript-sdk-in-react-native-expo-app-without-ejecting-2020-sca-bb88cbde2ac2
   * note that a server-side call is required to setup a Checkout session for a Connected Account - https://stripe.com/docs/payments/checkout/connect
-
+  * as noted here, the client-side only integration (as shown in the above article) is not compatiable with Connect - https://stripe.com/docs/payments/checkout/client
+* we could create a booking object in firestore when the customer clicks to book a class
+  * then a firebase function could respond to this and make the appropriate checkout session call (getting the connected account ID from the teacher's user record)
+  * that session ID would be saved back on the booking, which the client would then see
+  * the client could then redirect to the Checkout page
+  * when the checkout is completed, a Stripe webhook can hit a firebase function, that can update the booking and (potentially) the client can pick up on this
+  to terminate the checkout page...
+    * this is an example of using the `WebBrowser` module to open up a modal web browser and then detect when that is redirected back to the app - https://github.com/expo/examples/blob/master/with-webbrowser-redirect/app/App.js

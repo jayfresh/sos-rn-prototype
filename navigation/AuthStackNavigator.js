@@ -1,76 +1,11 @@
 
-/*
-class LoginContainer extends React.Component {
-    _updateLoginStatus = function () {
-        const user = firebase.auth().currentUser;
-        console.log('firebase user', user);
-        if (user != null) {
-            this.props.setParentState({
-                loggedIn: true,
-                givenName: user.displayName,
-                picture: user.photoURL
-            });
-        }
-    };
-    componentWillMount() {
-        console.log('Login button will mount');
-        this._updateLoginStatus();
-    }
-    _loginWithFacebook = async function () {
-        const result = await Facebook.logInWithReadPermissionsAsync(
-            facebookConfig.appId,
-            { permissions: ['public_profile', 'email'] }
-        );
-        console.log(result);
-
-        const {type, token} = result;
-
-        if (type === 'success') {
-            // Build Firebase credential with the Facebook access token.
-            const credential = firebase.auth.FacebookAuthProvider.credential(token);
-            console.log('credential', credential);
-
-            // Sign in with credential from the Facebook user.
-            firebase.auth().signInWithCredential(credential)
-            .then(_ => {
-                this._updateLoginStatus();
-            })
-            .catch(error => {
-                console.log('error', error);
-            });
-        }
-    };
-    _logoutFromFirebase = async function() {
-        firebase.auth().signOut();
-        this.props.setParentState({
-            loggedIn: false,
-            givenName: null,
-            picture: null
-        });
-    };
-
-    render() {
-        return (
-            <View style={{display: 'flex', flexDirection: 'row'}}>
-                <Button
-                    title='Login'
-                    onPress={() => this._loginWithFacebook()}
-                />
-                <Button
-                    title='Logout'
-                    onPress={() => this._logoutFromFirebase()}
-                />
-            </View>
-        );
-    }
-}
-*/
-
 import React from 'react';
 import { View } from 'react-native';
 import { Avatar, Button, Text } from 'react-native-elements';
 import { createStackNavigator } from 'react-navigation';
+import { Linking } from 'expo';
 import * as Facebook from 'expo-facebook';
+import * as WebBrowser from 'expo-web-browser';
 
 import { firebase } from '../config';
 import getEnvVars from '../environment';
@@ -113,10 +48,6 @@ class SignInScreen extends React.Component {
                 givenName: user.displayName,
                 picture: user.photoURL
             });
-            // allow time for the welcome message to be displayed as a result of the state update
-            setTimeout(_ => {
-                this.props.navigation.navigate('Main');
-            }, 2500);
         }
     };
 
@@ -151,6 +82,44 @@ class SignInScreen extends React.Component {
         });
     };
 
+    // openBrowserAsync requires that you subscribe to Linking events and the
+    // resulting Promise only contains information about whether it was canceled
+    // or dismissed
+    //
+    // ^^ the above message doesn't seem to be true for the Expo client app - the handlers I'm
+    // setting up below are not calling _handleRedirect
+    // It's unclear at the moment whether this is because it's the Expo client app or something else
+    _openBrowserAsync = async () => {
+        try {
+            this._addLinkingListener();
+            let result = await WebBrowser.openBrowserAsync(
+                // We add `?` at the end of the URL since the test backend that is used
+                // just appends `authToken=<token>` to the URL provided.
+                `https://backend-xxswjknyfi.now.sh/?linkingUri=${Linking.makeUrl('/?')}`
+            );
+            this._removeLinkingListener();
+        } catch (error) {
+            alert(error);
+            console.log(error);
+        }
+    };
+
+    _handleRedirect = event => {
+        console.log('handle redirect', event);
+        WebBrowser.dismissBrowser();
+        let data = Linking.parse(event.url);
+        console.log('linking URL', event.url);
+        console.log('data back from browser', data);
+    };
+
+    _addLinkingListener = () => {
+        Linking.addEventListener('url', this._handleRedirect);
+    };
+
+    _removeLinkingListener = () => {
+        Linking.removeEventListener('url', this._handleRedirect);
+    };
+
   render() {
     return (
         <View style={{display: 'flex', flex: 1, justifyContent: 'center'}}>
@@ -172,9 +141,17 @@ class SignInScreen extends React.Component {
                     onPress={() => this._loginWithFacebook()}
                 /> }
                 { this.state.loggedIn && <Button
+                    title='Continue'
+                    onPress={() => this.props.navigation.navigate('Main')}
+                    containerStyle={{marginBottom: 20}}
+                /> }
+                { this.state.loggedIn && <Button
                     title='Logout'
                     onPress={() => this._logoutFromFirebase()}
                 /> }
+            </View>
+            <View>
+                <Button title='Test Purchase Flow' onPress={() => this._openBrowserAsync()} />
             </View>
         </View>
     );

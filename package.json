@@ -19,7 +19,7 @@
     "expo-asset": "^7.0.0",
     "expo-constants": "~7.0.0",
     "expo-font": "^7.0.0",
-    "expo-web-browser": "^7.0.0",
+    "expo-web-browser": "~7.0.1",
     "firebase": "^7.3.0",
     "jwt-decode": "^2.2.0",
     "moment-timezone": "^0.5.27",
