@@ -7,96 +7,17 @@ import {
   Text,
   View,
 } from 'react-native';
-import * as Facebook from 'expo-facebook';
-import { Avatar, Button, Divider, ListItem } from 'react-native-elements';
+import { Divider, ListItem } from 'react-native-elements';
 
-import { db, firebase } from '../config';
+import { db } from '../config';
 import commonStyles from '../common/styles';
 import AddItem from '../components/AddItem';
 
-import getEnvVars from '../environment';
-const { facebookConfig } = getEnvVars();
-
 let list = null;
-
-// Listen for authentication state to change.
-firebase.auth().onAuthStateChanged(user => {
-  if (user != null) {
-    console.log('We are authenticated now!');
-  }
-});
-
-class LoginContainer extends React.Component {
-    _updateLoginStatus = function () {
-        const user = firebase.auth().currentUser;
-        console.log('firebase user', user);
-        if (user != null) {
-            this.props.setParentState({
-                loggedIn: true,
-                givenName: user.displayName,
-                picture: user.photoURL
-            });
-        }
-    };
-    componentWillMount() {
-        console.log('Login button will mount');
-        this._updateLoginStatus();
-    }
-    _loginWithFacebook = async function () {
-        const result = await Facebook.logInWithReadPermissionsAsync(
-            facebookConfig.appId,
-            { permissions: ['public_profile', 'email'] }
-        );
-        console.log(result);
-
-        const {type, token} = result;
-
-        if (type === 'success') {
-            // Build Firebase credential with the Facebook access token.
-            const credential = firebase.auth.FacebookAuthProvider.credential(token);
-            console.log('credential', credential);
-
-            // Sign in with credential from the Facebook user.
-            firebase.auth().signInWithCredential(credential)
-            .then(_ => {
-                this._updateLoginStatus();
-            })
-            .catch(error => {
-                console.log('error', error);
-            });
-        }
-    };
-    _logoutFromFirebase = async function() {
-        firebase.auth().signOut();
-        this.props.setParentState({
-            loggedIn: false,
-            givenName: null,
-            picture: null
-        });
-    };
-
-    render() {
-        return (
-            <View style={{display: 'flex', flexDirection: 'row'}}>
-                <Button
-                    title='Login'
-                    onPress={() => this._loginWithFacebook()}
-                />
-                <Button
-                    title='Logout'
-                    onPress={() => this._logoutFromFirebase()}
-                />
-            </View>
-        );
-    }
-}
 
 export default class HomeScreen extends React.Component {
     unsubscribe = null;
     state = {
-        loggedIn: false,
-        givenName: null,
-        picture: null,
         userList: list
     };
     componentDidMount() {
@@ -134,19 +55,6 @@ export default class HomeScreen extends React.Component {
                     </View>
                     <View style={styles.getStartedContainer}>
                         <AddItem text='Add a teacher' onPress={() => this.onPress() } />
-                        <LoginContainer setParentState={state => this.setState(state)} />
-                        { this.state.loggedIn && (
-                            <View style={{display: 'flex', flexDirection: 'row'}}>
-                                <Avatar
-                                    rounded
-                                    source={{
-                                        uri: this.state.picture
-                                    }}
-                                    containerStyle={{marginRight: 20}}
-                                />
-                                <Text style={{alignSelf: 'center'}}>Hello {this.state.givenName}!</Text>
-                            </View>
-                        )}
                     </View>
                     <Text style={{margin: 20}}>Teachers</Text>
                     <Divider />
