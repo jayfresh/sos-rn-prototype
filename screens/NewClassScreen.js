@@ -3,7 +3,7 @@ import { View, ScrollView } from 'react-native';
 import { Button, Input, Overlay, Text, ThemeProvider } from 'react-native-elements';
 import { Calendar } from 'react-native-calendars';
 
-import { db } from '../config';
+import { db, firebase } from '../config';
 import commonStyles from '../common/styles';
 import theme from '../common/theme';
 
@@ -20,7 +20,7 @@ const addClass = function(data) {
         location: data.location,
         startTime: startTime.toDate(),
         duration: duration,
-        instructor: 'TESTID',
+        instructor: data.userUID,
         weeklyRecurring: true
     })
     .then(function(docRef) {
@@ -34,12 +34,18 @@ const addClass = function(data) {
 export default class NewClassScreen extends React.Component {
     state = {
         loading: false,
+        userUID: null,
         name: '',
         location: '',
         selectedDate: null,
         startTime: '',
         endTime: ''
     };
+    componentDidMount() {
+        console.log('NewClassScreen did mount');
+        const userUID = this.props.navigation.getParam('userUID', null) || (firebase.auth().currentUser && firebase.auth().currentUser.uid);
+        this.setState({userUID});
+    }
     clearForm = () => {
         this.setState({
             name: '',

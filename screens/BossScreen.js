@@ -76,7 +76,7 @@ export default class BossScreen extends React.Component {
         );
     }
     onPress() {
-        this.props.navigation.navigate('NewClass');
+        this.props.navigation.navigate('NewClass', {userUID: this.state.userUID});
     }
 }
 
