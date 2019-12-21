@@ -20,18 +20,25 @@ const firebaseConfig = {
     appId: 'XXX',
 };
 
+const stripeConfig = {
+    stripe_publishable_key: 'XXX'
+};
+
 const ENV = {
     dev: {
-        facebookConfig: facebookConfig,
-        firebaseConfig: firebaseConfig
+        facebookConfig,
+        firebaseConfig,
+        stripeConfig
     },
     staging: {
-        facebookConfig: facebookConfig,
-        firebaseConfig: firebaseConfig
+        facebookConfig,
+        firebaseConfig,
+        stripeConfig
     },
     prod: {
-        facebookConfig: facebookConfig,
-        firebaseConfig: firebaseConfig
+        facebookConfig,
+        firebaseConfig,
+        stripeConfig
     }
 };
 

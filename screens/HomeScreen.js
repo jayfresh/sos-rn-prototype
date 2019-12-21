@@ -52,6 +52,7 @@ export default class HomeScreen extends React.Component {
                             source={require('../assets/images/sos_icon.png')}
                             style={styles.welcomeImage}
                         />
+                        BETA
                     </View>
                     <View style={styles.getStartedContainer}>
                         <AddItem text='Add a teacher' onPress={() => this.onPress() } />
