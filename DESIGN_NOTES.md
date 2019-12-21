@@ -53,8 +53,8 @@ in the firestripe sample app - https://github.com/firebase/functions-samples/blo
   to terminate the checkout page...
     * this is an example of using the `WebBrowser` module to open up a modal web browser and then detect when that is redirected back to the app - https://github.com/expo/examples/blob/master/with-webbrowser-redirect/app/App.js
     * an issue is that the Stripe SDK is not available for Expo apps, so I think I'll have to go with the WebView method shown in the Medium article linked above
-* 20/12/19: verified that using the WebView technique works for loading the checkout, completing the purchase and detecting the success URL
-  * the next steps: create a session redirect for the connected account (server-side); parameterise the checkout flow to use the booking ID
+* 20/12/19: verified that using the WebView technique works for loading the checkout, completing the purchase and detecting the success URL. Parameterised the checkout flow to use the booking ID
+  * the next steps: create a session redirect for the connected account (server-side); update booking to use logged-in user ID
 
 ### Test card details
 

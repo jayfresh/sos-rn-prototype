@@ -5,6 +5,7 @@ import { Button, Input, Overlay, Text, ThemeProvider } from 'react-native-elemen
 import { db, firebase } from '../config';
 import commonStyles from '../common/styles';
 import theme from '../common/theme';
+import { thisTypeAnnotation } from '@babel/types';
 
 const TEST_QUEEN_ID = 'testUserID';
 
@@ -12,6 +13,7 @@ export default class ClassDetailScreen extends React.Component {
     state = {
         userID: TEST_QUEEN_ID,
         successOverlayVisible: false,
+        class: null,
         classID: '',
         className: '',
         classDuration: '',
@@ -21,9 +23,10 @@ export default class ClassDetailScreen extends React.Component {
     };
     componentDidMount = () => {
         const c = this.props.navigation.getParam('class');
-        console.log('class param', c);
+        const checkoutSuccess = this.props.navigation.getParam('checkoutSuccess');
         if (c) {
             this.setState({
+                class: c,
                 classID: c.id,
                 className: c.name,
                 classDuration: c.duration,
@@ -32,10 +35,18 @@ export default class ClassDetailScreen extends React.Component {
                 booked: c.bookings && c.bookings.includes(TEST_QUEEN_ID)
             });
         }
+        if (checkoutSuccess) {
+            this.onCheckoutSuccess(c.id);
+        }
     }
     onPressSubmit = () => {
+        this.props.navigation.navigate('Checkout', {
+            class: this.state.class
+        });
+    };
+    onCheckoutSuccess = (classID) => {
         // update the class in the database with the customer ID
-        var classRef = db.collection('classes').doc(this.state.classID);
+        var classRef = db.collection('classes').doc(classID);
         return classRef.update({
             bookings: firebase.firestore.FieldValue.arrayUnion(this.state.userID)
         })
