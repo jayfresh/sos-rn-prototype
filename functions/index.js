@@ -6,7 +6,7 @@ const admin = require('firebase-admin');
 admin.initializeApp();
 const db = admin.firestore();
 
-exports.linkUser = functions.auth.user().onCreate(user => {
+exports.linkUser = functions.region('europe-west2').auth.user().onCreate(user => {
   console.log('user');
   console.log(user);
   var email = user.email;
@@ -36,13 +36,19 @@ exports.linkUser = functions.auth.user().onCreate(user => {
 });
 
 // When a firestore user document has its roles updated, also update the custom claims on the firebase user
-exports.updateRoles = functions.firestore.document('users/{userId}').onWrite((change, context) => {
+// NB: if a user document changes its email field, this will update the user matching the email before it was edited
+exports.updateRoles = functions.region('europe-west2').firestore.document('users/{userId}').onWrite((change, context) => {
     // check we have a user with an email and that the roles have been updated
-    const email = document.email;
+    const email = change.before.get('email');
     const rolesBefore = change.before.get('roles');
     const roles = change.after.exists ? change.after.get('roles') : [];
     const rolesMatch = roles === rolesBefore;
-    if (!email || rolesMatch) { return; }
+    if (!email || rolesMatch) {
+        console.log('either no email or roles match, nothing to do');
+        console.log('email', email);
+        console.log('rolesMatch', rolesMatch, rolesBefore, roles);
+        return;
+    }
     // find the user and then update the claims to match the roles
     return admin.auth().getUserByEmail(email)
     .then(user => {
@@ -56,11 +62,14 @@ exports.updateRoles = functions.firestore.document('users/{userId}').onWrite((ch
         // now set the custom claims on this user
         return admin.auth().setCustomUserClaims(user.uid, customClaims)
         .then(() => {
+            console.log('successful update to customClaims');
+            console.log(email, user.uid, customClaims);
             // update firestore to notify client to force refresh
             // set the refresh time to the current UTC timestamp
             // this will be captured on the client to force a token refresh
             return db.doc('metadata/' + user.uid).set({
-                refreshTime: new Date().getTime()
+                refreshTime: new Date(),
+                customClaims: customClaims
             });
         });
     })
