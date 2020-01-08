@@ -59,3 +59,35 @@ in the firestripe sample app - https://github.com/firebase/functions-samples/blo
 ### Test card details
 
 See this page, at the bottom: https://stripe.com/docs/payments/save-and-reuse
+
+## Handling roles
+
+### Handling roles within the interface
+
+What we need is a system to allow people to see different menu items depending on what role they are. This could be achieved via responding to roles within the JSX.
+Auth0 have a good tutorial about role-based access control (https://auth0.com/blog/role-based-access-control-rbac-and-react-apps/#Role-Based-Access-Control--a-Better-Solution),
+which shows the use of a file of rules for each role, and then a `Can` component that you use like this:
+
+```
+<Can
+  role={user.role}
+  perform="dashboard-page:visit"
+  yes={() => (
+    <h2>User can do it</h2>
+  )}
+  no={() => <h2>User can't do it</h2>}
+/>
+```
+
+### Granting roles to users
+
+Ideas for giving certain users roles:
+
+* run a script on user authentication that adds roles to the user object if the email address matches a list e.g. for admins
+* add a custom claim to the ID token returned by the authentication server e.g. `context.idToken['https://my-app/role'] = user.app_metadata.role`
+* use Firebase auth custom claims to store role information on the user's token - these are available in the client and within Firestore security rules
+  * video introducing the concepts here: https://www.youtube.com/watch?v=3hj_r_N0qMs
+  * docs here: https://firebase.google.com/docs/auth/admin/custom-claims
+  * we'd need to run a Cloud Function to grant appropriate roles to users - one option is to run such a function when a document in the user collection
+  is updated, and check whether that document has just had a role added (or removed), and run the custom claim update script if so
+  * note, if a custom claim changes whilst the user's token is valid, it will need to be force-refreshed in order to get a new token with the updated claims
