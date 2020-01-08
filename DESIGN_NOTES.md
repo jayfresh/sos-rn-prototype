@@ -87,7 +87,38 @@ Ideas for giving certain users roles:
 * add a custom claim to the ID token returned by the authentication server e.g. `context.idToken['https://my-app/role'] = user.app_metadata.role`
 * use Firebase auth custom claims to store role information on the user's token - these are available in the client and within Firestore security rules
   * video introducing the concepts here: https://www.youtube.com/watch?v=3hj_r_N0qMs
+    * also has a link to a related codelab: https://codelabs.developers.google.com/codelabs/firebase-admin/#0
   * docs here: https://firebase.google.com/docs/auth/admin/custom-claims
   * we'd need to run a Cloud Function to grant appropriate roles to users - one option is to run such a function when a document in the user collection
   is updated, and check whether that document has just had a role added (or removed), and run the custom claim update script if so
   * note, if a custom claim changes whilst the user's token is valid, it will need to be force-refreshed in order to get a new token with the updated claims
+    * log out and log back in again, or call `currentUser.getIdToken(true);`
+
+Some useful notes for using the firebase command-line and custom claims:
+
+* firebase login
+* firebase use --add (from within the project folder)
+* firebase deploy --only firestore (to deploy firestore rules and indexes)
+* the user needs to be in Firebase before you can give it a custom claim
+
+Initialising the firebase admin lib:
+```
+import * as admin from 'firebase-admin';
+
+const serviceAccount = require('serviceAccountKey.json');
+admin.initializeApp({
+ credential: admin.credential.cert(serviceAccount),
+});
+```
+
+Adding a custom claim:
+```
+const email = 'test@example.com';
+const user = yield admin.auth().getUserByEmail(email);
+if (user.customClaims && user.customClaims.admin === true) {
+    return;
+}
+return admin.auth().setCustomUserClaims(user.uid, {
+    moderator: true,
+});
+```
