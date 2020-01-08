@@ -7,20 +7,47 @@ import { Linking } from 'expo';
 import * as Facebook from 'expo-facebook';
 import * as WebBrowser from 'expo-web-browser';
 
-import { firebase } from '../config';
+import { db, firebase } from '../config';
 import getEnvVars from '../environment';
 import CheckoutScreen from '../screens/CheckoutScreen';
 
 const { facebookConfig } = getEnvVars();
 
 let updateLoginStatus = null;
+let updateRoles = null;
 
 // Listen for authentication state to change.
+// When user logs in, update login status and add a listener for any metadata changes,
+// which will be related to role changes
+let metadataCallbackUnsubscribe = null;
 firebase.auth().onAuthStateChanged(user => {
-  if (user != null) {
-    console.log('We are authenticated now!');
-    updateLoginStatus && updateLoginStatus();
-  }
+    // Remove previous listener.
+    if (metadataCallbackUnsubscribe) {
+        metadataCallbackUnsubscribe();
+    }
+    // On user login add new listener
+    if (user) {
+        console.log('We are authenticated now!');
+        updateLoginStatus && updateLoginStatus();
+        
+        // Check if refresh is required.
+        metadataCallbackUnsubscribe = db.collection('metadata').doc(user.uid)
+        .onSnapshot(snapshot => {
+            console.log('medataChangeCallback', snapshot.data());
+            // Force refresh to pick up the latest custom claims changes.
+            // Note this is always triggered on first call. Further optimization could be
+            // added to avoid the initial trigger when the token is issued and already contains
+            // the latest claims.
+            user.getIdTokenResult(true)
+            .then(idTokenResult => {
+                const claims = idTokenResult && idTokenResult.claims;
+                if (claims) {
+                    console.log('CLAIMS!', claims);
+                    updateRoles && updateRoles(claims);
+                }
+            });
+        });
+    }
 });
 
 class SignInScreen extends React.Component {
@@ -31,13 +58,16 @@ class SignInScreen extends React.Component {
     state = {
         loggedIn: false,
         givenName: null,
-        picture: null
+        picture: null,
+        isBoss: false,
+        isAdmin: false
     };
 
     componentWillMount() {
-        // the componentWillMount event will happen before the firebase auth onAuthStateChanged event will have fired
+        // the componentWillMount event will happen before the firebase auth onAuthStateChanged event will have fired (and the role/metadata update)
         // so we can make this instance method available to that listener
         updateLoginStatus = () => this._updateLoginStatus();
+        updateRoles = claims => this._updateRoles(claims);
     }
 
     _updateLoginStatus = function () {
@@ -50,6 +80,14 @@ class SignInScreen extends React.Component {
                 picture: user.photoURL
             });
         }
+    };
+
+    _updateRoles = function(claims) {
+        if (!claims) { return; }
+        this.setState({
+            isBoss: !!claims.boss,
+            isAdmin: !!claims.admin
+        });
     };
 
     _loginWithFacebook = async function () {
@@ -133,7 +171,9 @@ class SignInScreen extends React.Component {
                         }}
                         containerStyle={{marginRight: 20}}
                     />
-                    <Text style={{alignSelf: 'center'}}>Hello {this.state.givenName}!</Text>
+                    <Text style={{alignSelf: 'center'}}>Hello {this.state.givenName}!
+                    { this.state.isAdmin && ' You are an admin!'}
+                    { this.state.isBoss && ' You are a boss!'}</Text>
                 </View>
             )}
             <View style={{padding: 50}}>
