@@ -102,11 +102,11 @@ class CustomNavigator extends React.Component {
             }
             return true;
         });
-        const activeIndex = 0;
+        const activeIndex = navState.index;
         return <TabNavigator navigation={{
           ...navigation,
           state: {
-            ...navigation.state,
+            ...navState,
             routes: filteredRoutes,
             index: activeIndex,
           }

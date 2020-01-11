@@ -79,6 +79,8 @@ which shows the use of a file of rules for each role, and then a `Can` component
 />
 ```
 
+The implementation of handling roles is not great - the React Navigation tab navigator always shows at least one tab, but the tabs are role-dependent, so that's a start.
+
 ### Granting roles to users
 
 Ideas for giving certain users roles:

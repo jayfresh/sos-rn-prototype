@@ -81,5 +81,5 @@ export default class BossScreen extends React.Component {
 }
 
 BossScreen.navigationOptions = {
-    title: 'Boss',
+    title: 'Hello Boss!',
 };
