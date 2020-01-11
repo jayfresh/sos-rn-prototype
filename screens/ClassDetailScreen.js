@@ -5,7 +5,6 @@ import { Button, Input, Overlay, Text, ThemeProvider } from 'react-native-elemen
 import { db, firebase } from '../config';
 import commonStyles from '../common/styles';
 import theme from '../common/theme';
-import { thisTypeAnnotation } from '@babel/types';
 
 const TEST_QUEEN_ID = 'testUserID';
 
