@@ -1,13 +1,12 @@
 import React from 'react';
 import { WebView } from 'react-native-webview';
+
 import { stripeCheckoutRedirectHTML } from './stripeCheckout';
+import { firebase } from '../../config';
 import getEnvVars from '../../environment';
 const { stripeConfig } = getEnvVars();
 
 class CheckoutScreen extends React.Component {
-
-    // TODO: this should come from some service/state store
-    user = { id: 'someID' };
 
     // Called everytime the URL starts to load in the webview
     onLoadStart = (syntheticEvent) => {
@@ -30,13 +29,14 @@ class CheckoutScreen extends React.Component {
     };
 
     render() {
-        if (!this.user) {
+        const user = firebase.auth().currentUser;
+        if (!user) {
             return null;
         }
         return (
             <WebView
                 originWhitelist={['*']}
-                source={{ html: stripeCheckoutRedirectHTML(this.user.id) }}
+                source={{ html: stripeCheckoutRedirectHTML(user.uid) }}
                 onLoadStart={(e) => this.onLoadStart(e)}
             />
         );

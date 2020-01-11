@@ -9,7 +9,6 @@ import * as WebBrowser from 'expo-web-browser';
 
 import { db, firebase } from '../config';
 import getEnvVars from '../environment';
-import CheckoutScreen from '../screens/CheckoutScreen';
 
 const { facebookConfig } = getEnvVars();
 
@@ -193,16 +192,11 @@ class SignInScreen extends React.Component {
                     onPress={() => this._logoutFromFirebase()}
                 /> }
             </View>
-            <View>
-                <Button title='Test Purchase Flow' onPress={() => this._openBrowserAsync()} />
-                <Button title='Test Purchase Flow with checkout screen' onPress={() => this.props.navigation.navigate('Checkout')} />
-            </View>
         </View>
     );
   }
 }
 
 export default createStackNavigator({
-    SignIn: SignInScreen,
-    Checkout: CheckoutScreen
+    SignIn: SignInScreen
 });
