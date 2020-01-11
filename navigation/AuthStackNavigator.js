@@ -22,9 +22,7 @@ let updateRoles = null;
 let metadataCallbackUnsubscribe = null;
 firebase.auth().onAuthStateChanged(user => {
     // Remove previous listener.
-    if (metadataCallbackUnsubscribe) {
-        metadataCallbackUnsubscribe();
-    }
+    metadataCallbackUnsubscribe && metadataCallbackUnsubscribe();
     // On user login add new listener
     if (user) {
         console.log('We are authenticated now!');
@@ -68,6 +66,10 @@ class SignInScreen extends React.Component {
         // so we can make this instance method available to that listener
         updateLoginStatus = () => this._updateLoginStatus();
         updateRoles = claims => this._updateRoles(claims);
+    }
+
+    componentWillUnmount() {
+        metadataCallbackUnsubscribe && metadataCallbackUnsubscribe();
     }
 
     _updateLoginStatus = function () {
@@ -183,7 +185,7 @@ class SignInScreen extends React.Component {
                 /> }
                 { this.state.loggedIn && <Button
                     title='Continue'
-                    onPress={() => this.props.navigation.navigate('Main')}
+                    onPress={() => this.props.navigation.navigate('Main', {isAdmin: this.state.isAdmin, isBoss: this.state.isBoss})}
                     containerStyle={{marginBottom: 20}}
                 /> }
                 { this.state.loggedIn && <Button

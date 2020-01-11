@@ -69,7 +69,7 @@ QueensStack.navigationOptions = {
 
 QueensStack.path = '';
 
-const tabNavigator = createBottomTabNavigator({
+const TabNavigator = createBottomTabNavigator({
   HomeStack,
   BossStack,
   QueensStack,
@@ -77,6 +77,41 @@ const tabNavigator = createBottomTabNavigator({
     resetOnBlur: true
 });
 
-tabNavigator.path = '';
+TabNavigator.path = '';
 
-export default tabNavigator;
+// We're creating a custom navigator that wraps the TabNavigator, so the visible tabs can be dependent on role
+// See the docs here for creating custom navigators: https://reactnavigation.org/docs/en/custom-navigators.html
+// This GitHub issue shows this feature is a "heated" issue (at least prior to React Navigation 5.0):
+// https://github.com/react-navigation/react-navigation/issues/717
+class CustomNavigator extends React.Component {
+    static router = TabNavigator.router;
+    constructor(props) {
+        super(props);
+        this.isAdmin = props.navigation.getParam('isAdmin', false);
+        this.isBoss = props.navigation.getParam('isBoss', false);
+    }
+    render() {
+        const { navigation } = this.props;
+        const navState = navigation.state;
+        const filteredRoutes = navState.routes.filter(r => {
+            if (r.routeName === 'HomeStack') {
+                return this.isAdmin;
+            }
+            if (r.routeName === 'BossStack') {
+                return this.isBoss;
+            }
+            return true;
+        });
+        const activeIndex = 0;
+        return <TabNavigator navigation={{
+          ...navigation,
+          state: {
+            ...navigation.state,
+            routes: filteredRoutes,
+            index: activeIndex,
+          }
+        }} />;
+    }
+}
+
+export default CustomNavigator;
