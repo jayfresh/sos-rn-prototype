@@ -6,11 +6,9 @@ import { db, firebase } from '../config';
 import commonStyles from '../common/styles';
 import theme from '../common/theme';
 
-const TEST_QUEEN_ID = 'testUserID';
-
 export default class ClassDetailScreen extends React.Component {
     state = {
-        userID: TEST_QUEEN_ID,
+        userID: null,
         successOverlayVisible: false,
         class: null,
         classID: '',
@@ -21,21 +19,23 @@ export default class ClassDetailScreen extends React.Component {
         booked: false
     };
     componentDidMount = () => {
+        const loggedInQueenId = firebase.auth().currentUser.uid;
         const c = this.props.navigation.getParam('class');
         const checkoutSuccess = this.props.navigation.getParam('checkoutSuccess');
         if (c) {
             this.setState({
+                userID: loggedInQueenId,
                 class: c,
                 classID: c.id,
                 className: c.name,
                 classDuration: c.duration,
                 classLocation: c.location,
                 classBookings: c.bookings && c.bookings.length,
-                booked: c.bookings && c.bookings.includes(TEST_QUEEN_ID)
+                booked: c.bookings && c.bookings.includes(loggedInQueenId)
             });
         }
         if (checkoutSuccess) {
-            this.onCheckoutSuccess(c.id);
+            this.onCheckoutSuccess(c.id, loggedInQueenId); // provide the queen ID as the setState won't have completed by the time the function is called
         }
     }
     onPressSubmit = () => {
@@ -43,11 +43,14 @@ export default class ClassDetailScreen extends React.Component {
             class: this.state.class
         });
     };
-    onCheckoutSuccess = (classID) => {
+    onCheckoutSuccess = (classID, queenId) => {
         // update the class in the database with the customer ID
+        // NB: WHAT WE'RE DOING HERE IS NOT GOOD PRACTICE
+        // WE SHOULD PROCESS A WEBHOOK FROM STRIPE ON THE SERVER
+        // AND USE THAT TO UPDATE THE CLASSES DOCUMENT
         var classRef = db.collection('classes').doc(classID);
         return classRef.update({
-            bookings: firebase.firestore.FieldValue.arrayUnion(this.state.userID)
+            bookings: firebase.firestore.FieldValue.arrayUnion(queenId)
         })
         .then(() => {
             console.log('Booking added');

@@ -2,20 +2,20 @@ import React from 'react';
 import { View, ScrollView } from 'react-native';
 import { Divider, ListItem, Text } from 'react-native-elements';
 
-import { db } from '../config';
+import { db, firebase } from '../config';
 import commonStyles from '../common/styles';
 import { formatDate } from '../common/utilities';
 
 export default class QueensScreen extends React.Component {
     unsubscribe = null;
     state = {
-        userID: 'testUserID',
         classList: [],
         bookings: []
     };
     // Note: may need to use onComponentFocus / onComponentBlur as with BossScreen
     componentDidMount() {
         console.log('QueenScreen did mount');
+        const loggedInQueenId = firebase.auth().currentUser.uid;
         this.unsubscribe = db.collection('classes').orderBy('startTime')
         .onSnapshot(querySnapshot => {
             const list = [];
@@ -23,7 +23,7 @@ export default class QueensScreen extends React.Component {
                 console.log(`${doc.id} => ${JSON.stringify(doc.data())}`);
                 list.push(Object.assign(doc.data(), {id: doc.id}));
             });
-            const myList = list.filter(c => c.bookings && c.bookings.includes(this.state.userID));
+            const myList = list.filter(c => c.bookings && c.bookings.includes(loggedInQueenId));
             this.setState({
                 classList: list,
                 bookings: myList
@@ -75,5 +75,5 @@ export default class QueensScreen extends React.Component {
 }
 
 QueensScreen.navigationOptions = {
-  title: 'Queens',
+    title: 'Hello Queen!'
 };
