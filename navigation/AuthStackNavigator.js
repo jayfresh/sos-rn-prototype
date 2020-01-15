@@ -92,6 +92,7 @@ class SignInScreen extends React.Component {
     };
 
     _loginWithFacebook = async function () {
+        await Facebook.initializeAsync(facebookConfig.appId);
         const result = await Facebook.logInWithReadPermissionsAsync(
             facebookConfig.appId,
             { permissions: ['public_profile', 'email'] }
