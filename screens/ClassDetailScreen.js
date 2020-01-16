@@ -1,5 +1,6 @@
 import React from 'react';
 import { View, ScrollView } from 'react-native';
+import { NavigationEvents } from 'react-navigation';
 import { Button, Input, Overlay, Text, ThemeProvider } from 'react-native-elements';
 
 import { db, firebase } from '../config';
@@ -19,9 +20,9 @@ export default class ClassDetailScreen extends React.Component {
         booked: false
     };
     componentDidMount = () => {
+        console.log('ClassDetailScreen did mount');
         const loggedInQueenId = firebase.auth().currentUser.uid;
         const c = this.props.navigation.getParam('class');
-        const checkoutSuccess = this.props.navigation.getParam('checkoutSuccess');
         if (c) {
             this.setState({
                 userID: loggedInQueenId,
@@ -34,7 +35,14 @@ export default class ClassDetailScreen extends React.Component {
                 booked: c.bookings && c.bookings.includes(loggedInQueenId)
             });
         }
-        if (checkoutSuccess) {
+    }
+    onComponentFocus = () => {
+        // the class detail screen is focussed not mounted when coming back from the checkout
+        const loggedInQueenId = firebase.auth().currentUser.uid;
+        const c = this.props.navigation.getParam('class');
+        const checkoutSuccess = this.props.navigation.getParam('checkoutSuccess');
+        console.log('ClassDetailScreen did focus, loggedInQueenId', loggedInQueenId);
+        if (c && checkoutSuccess) {
             this.onCheckoutSuccess(c.id, loggedInQueenId); // provide the queen ID as the setState won't have completed by the time the function is called
         }
     }
@@ -44,6 +52,7 @@ export default class ClassDetailScreen extends React.Component {
         });
     };
     onCheckoutSuccess = (classID, queenId) => {
+        console.log('onCheckoutSuccess', classID, queenId);
         // update the class in the database with the customer ID
         // NB: WHAT WE'RE DOING HERE IS NOT GOOD PRACTICE
         // WE SHOULD PROCESS A WEBHOOK FROM STRIPE ON THE SERVER
@@ -67,8 +76,15 @@ export default class ClassDetailScreen extends React.Component {
         this.props.navigation.goBack();
     };
     render() {
+        console.log('ClassDetail render');
         return (
             <ScrollView style={commonStyles.container}>
+                <NavigationEvents
+                    onWillFocus={payload => console.log('CDS will focus', payload)}
+                    onWillBlur={payload => console.log('CDS will blur', payload)}
+                    onDidFocus={() => this.onComponentFocus()}
+                    onDidBlur={payload => console.log('CDS did blur', payload)}
+                />
             {
                     this.state.successOverlayVisible && (
                         <Overlay
