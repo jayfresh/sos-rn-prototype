@@ -19,7 +19,8 @@ let updateRoles = null;
 // When user logs in, update login status and add a listener for any metadata changes,
 // which will be related to role changes
 let metadataCallbackUnsubscribe = null;
-firebase.auth().onAuthStateChanged(user => {
+const loginSuccessCallback = user => {
+    console.log('AUTH onAuthStateChanged');
     // Remove previous listener.
     metadataCallbackUnsubscribe && metadataCallbackUnsubscribe();
     // On user login add new listener
@@ -45,7 +46,8 @@ firebase.auth().onAuthStateChanged(user => {
             });
         });
     }
-});
+};
+firebase.auth().onAuthStateChanged(loginSuccessCallback);
 
 class SignInScreen extends React.Component {
     static navigationOptions = {
@@ -60,15 +62,19 @@ class SignInScreen extends React.Component {
         isAdmin: false
     };
 
-    componentWillMount() {
-        // the componentWillMount event will happen before the firebase auth onAuthStateChanged event will have fired (and the role/metadata update)
+    componentDidMount() {
+        console.log('****** SIGNIN DID MOUNT ******');
+        // the componentDidMount event will happen before the firebase auth onAuthStateChanged event will have fired (and the role/metadata update)
         // so we can make this instance method available to that listener
         updateLoginStatus = () => this._updateLoginStatus();
         updateRoles = claims => this._updateRoles(claims);
     }
 
     componentWillUnmount() {
+        console.log('****** SIGNIN WILL UNMOUNT ******');
         metadataCallbackUnsubscribe && metadataCallbackUnsubscribe();
+        updateLoginStatus = () => false;
+        updateRoles = () => false;
     }
 
     _updateLoginStatus = function () {
@@ -92,6 +98,11 @@ class SignInScreen extends React.Component {
     };
 
     _loginWithFacebook = async function () {
+        // check if logged in first
+        const user = firebase.auth().currentUser;
+        if (user) {
+            return loginSuccessCallback(user);
+        }
         await Facebook.initializeAsync(facebookConfig.appId);
         const result = await Facebook.logInWithReadPermissionsAsync(
             facebookConfig.appId,
