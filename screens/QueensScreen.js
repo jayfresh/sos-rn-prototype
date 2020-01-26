@@ -75,5 +75,5 @@ export default class QueensScreen extends React.Component {
 }
 
 QueensScreen.navigationOptions = {
-    title: 'Hello Queen!'
+    title: 'Hey Queen!'
 };

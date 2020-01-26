@@ -4,7 +4,7 @@ import { Button, Input, Overlay, Text, ThemeProvider } from 'react-native-elemen
 
 import { db } from '../config';
 import commonStyles from '../common/styles';
-import theme from '../common/styles';
+import theme from '../common/theme';
 
 const addUser = function(data) {
     return db.collection('users').add({

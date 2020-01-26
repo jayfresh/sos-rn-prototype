@@ -1,7 +1,12 @@
+import Colors from './colors';
+
 const theme = {
     Input: {
         containerStyle: {
             marginBottom: 20
+        },
+        labelStyle: {
+            color: Colors.black
         }
     },
     Button: {
