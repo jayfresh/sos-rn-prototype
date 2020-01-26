@@ -12,7 +12,10 @@ const theme = {
     Button: {
         containerStyle: {
             paddingHorizontal: 50,
-            paddingVertical: 20
+            paddingVertical: 20,
+        },
+        buttonStyle: {
+            backgroundColor: Colors.pop
         }
     }
 };
