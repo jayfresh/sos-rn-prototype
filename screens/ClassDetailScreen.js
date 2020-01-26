@@ -92,7 +92,7 @@ export default class ClassDetailScreen extends React.Component {
                             onBackdropPress={() => this.setState({ successOverlayVisible: false })}
                         >
                             <View style={{flex: 1, justifyContent: 'center'}}>
-                                <Text h3 style={commonStyles.overlayH3Text}>Class booked!</Text>
+                                <Text h3 style={commonStyles.overlayH3Text}>Class booked! See you on the dance floor</Text>
                                 <Button
                                     title='Back to class list'
                                     onPress={this.backButtonPress}
@@ -108,7 +108,7 @@ export default class ClassDetailScreen extends React.Component {
                     <Text style={commonStyles.bodyText}>Duration: {this.state.classDuration} minutes</Text>
                     <ThemeProvider theme={theme}>
                         <Button
-                            title={this.state.booked ? 'You\'re booked' : 'Book class'}
+                            title={this.state.booked ? 'You\'re booked!' : 'Book class'}
                             type={this.state.booked ? 'clear' : 'solid'}
                             disabled={this.state.booked}
                             onPress={this.onPressSubmit}

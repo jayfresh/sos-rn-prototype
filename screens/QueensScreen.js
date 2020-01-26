@@ -38,7 +38,7 @@ export default class QueensScreen extends React.Component {
         return (
             <ScrollView style={commonStyles.container}>
                 <View>
-                    <Text h4 style={commonStyles.headingText}>My bookings</Text>
+                    <Text h4 style={commonStyles.headingText}>My schedule</Text>
                 </View>
                 <Divider />
                 <View>
@@ -53,7 +53,7 @@ export default class QueensScreen extends React.Component {
                 </View>
                 <Divider />
                 <View>
-                    <Text h4 style={commonStyles.headingText}>All classes</Text>
+                    <Text h4 style={commonStyles.headingText}>All BOSS classes</Text>
                 </View>
                 <Divider />
                 <View>

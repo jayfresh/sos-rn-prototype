@@ -6,7 +6,7 @@ const formatDate = (d, durationInMinutes) => {
         out = moment.unix(d.seconds);
     }
     const end = moment(out).add(durationInMinutes, 'minutes');
-    return out.format('Do MMM // HH:mm-') + end.format('HH:mm');
+    return out.format('ddd Do MMM // HH:mm-') + end.format('HH:mm');
 };
 
 const classTitle = c => {
