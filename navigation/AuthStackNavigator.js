@@ -1,12 +1,14 @@
 
 import React from 'react';
 import { View } from 'react-native';
-import { Avatar, Button, Text } from 'react-native-elements';
+import { Avatar, Button, Text, ThemeProvider } from 'react-native-elements';
 import { createStackNavigator } from 'react-navigation';
 import { Linking } from 'expo';
 import * as Facebook from 'expo-facebook';
 import * as WebBrowser from 'expo-web-browser';
 
+import Colors from '../common/colors';
+import theme from '../common/theme';
 import { db, firebase } from '../config';
 import getEnvVars from '../environment';
 
@@ -174,37 +176,47 @@ class SignInScreen extends React.Component {
 
   render() {
     return (
-        <View style={{display: 'flex', flex: 1, justifyContent: 'center'}}>
-            { this.state.loggedIn && (
-                <View style={{display: 'flex', flexDirection: 'row', padding: 50}}>
-                    <Avatar
-                        rounded
-                        source={{
-                            uri: this.state.picture
+        <ThemeProvider theme={theme}>
+            <View style={{display: 'flex', flex: 1, justifyContent: 'center'}}>
+                { this.state.loggedIn && (
+                    <View style={{display: 'flex', flexDirection: 'row', padding: 50}}>
+                        <Avatar
+                            rounded
+                            source={{
+                                uri: this.state.picture
+                            }}
+                            containerStyle={{marginRight: 20}}
+                        />
+                        <Text style={{alignSelf: 'center'}}>Hey {this.state.givenName}!
+                        { this.state.isAdmin && ' You are an admin!'}
+                        { this.state.isBoss && ' You are a BOSS!'}</Text>
+                    </View>
+                )}
+                <View style={{padding: 50}}>
+                    { !this.state.loggedIn && <Button
+                        title='Login'
+                        onPress={() => this._loginWithFacebook()}
+                    /> }
+                    { this.state.loggedIn && <Button
+                        title='Continue'
+                        onPress={() => this.props.navigation.navigate('Main', {isAdmin: this.state.isAdmin, isBoss: this.state.isBoss})}
+                        containerStyle={{marginBottom: 20}}
+                    /> }
+                    { this.state.loggedIn && <Button
+                        title='Logout'
+                        type='outline'
+                        onPress={() => this._logoutFromFirebase()}
+                        buttonStyle={{
+                            backgroundColor: Colors.white,
+                            borderColor: Colors.pop
                         }}
-                        containerStyle={{marginRight: 20}}
-                    />
-                    <Text style={{alignSelf: 'center'}}>Hey {this.state.givenName}!
-                    { this.state.isAdmin && ' You are an admin!'}
-                    { this.state.isBoss && ' You are a BOSS!'}</Text>
+                        titleStyle={{
+                            color: Colors.pop
+                        }}
+                    /> }
                 </View>
-            )}
-            <View style={{padding: 50}}>
-                { !this.state.loggedIn && <Button
-                    title='Login'
-                    onPress={() => this._loginWithFacebook()}
-                /> }
-                { this.state.loggedIn && <Button
-                    title='Continue'
-                    onPress={() => this.props.navigation.navigate('Main', {isAdmin: this.state.isAdmin, isBoss: this.state.isBoss})}
-                    containerStyle={{marginBottom: 20}}
-                /> }
-                { this.state.loggedIn && <Button
-                    title='Logout'
-                    onPress={() => this._logoutFromFirebase()}
-                /> }
             </View>
-        </View>
+        </ThemeProvider>
     );
   }
 }
