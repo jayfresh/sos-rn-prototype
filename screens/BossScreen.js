@@ -6,7 +6,7 @@ import { Divider, ListItem } from 'react-native-elements';
 import { db, firebase } from '../config';
 import AddItem from '../components/AddItem';
 import commonStyles from '../common/styles';
-import { formatDate } from '../common/utilities';
+import { classTitle, classSubtitle } from '../common/utilities';
 
 export default class BossScreen extends React.Component {
     unsubscribe = null;
@@ -65,8 +65,8 @@ export default class BossScreen extends React.Component {
                     { this.state.classList && this.state.classList.map((c, i) => (
                         <ListItem
                             key={i}
-                            title={c.name + ' @ ' + c.location + (c.bookings && c.bookings.length ? ` (${c.bookings.length} bookings)` : '')}
-                            subtitle={formatDate(c.startTime) + ' / ' + c.duration + ' minutes'}
+                            title={classTitle(c) + (c.bookings && c.bookings.length ? ` (${c.bookings.length} bookings)` : '')}
+                            subtitle={classSubtitle(c)}
                             bottomDivider
                         />
                     ))}

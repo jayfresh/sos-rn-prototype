@@ -1,6 +1,6 @@
 const Colors = {
     black: '#000',
-    pop: ''
+    pop: '#fc3036',
 };
 
 export default Colors;

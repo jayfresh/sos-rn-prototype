@@ -4,7 +4,7 @@ import { Divider, ListItem, Text } from 'react-native-elements';
 
 import { db, firebase } from '../config';
 import commonStyles from '../common/styles';
-import { formatDate } from '../common/utilities';
+import { classTitle, classSubtitle } from '../common/utilities';
 
 export default class QueensScreen extends React.Component {
     unsubscribe = null;
@@ -45,8 +45,8 @@ export default class QueensScreen extends React.Component {
                     { this.state.bookings && this.state.bookings.map((c, i) => (
                         <ListItem
                             key={i}
-                            title={c.name + ' @ ' + c.location}
-                            subtitle={formatDate(c.startTime) + ' / ' + c.duration + ' minutes'}
+                            title={classTitle(c)}
+                            subtitle={classSubtitle(c)}
                         />
                     ))}
                     { this.state.bookings && this.state.bookings.length === 0 && <Text style={[commonStyles.bodyText, {marginVertical: 20}]}>No bookings</Text> }
@@ -60,8 +60,8 @@ export default class QueensScreen extends React.Component {
                     { this.state.classList && this.state.classList.map((c, i) => (
                         <ListItem
                             key={i}
-                            title={c.name + ' @ ' + c.location}
-                            subtitle={formatDate(c.startTime) + ' / ' + c.duration + ' minutes'}
+                            title={classTitle(c)}
+                            subtitle={classSubtitle(c)}
                             bottomDivider
                             chevron
                             onPress={() => this.props.navigation.navigate('ClassDetail', {class: c})}
