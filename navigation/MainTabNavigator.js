@@ -78,7 +78,9 @@ const TabNavigator = createBottomTabNavigator({
   QueensStack,
 }, {
     resetOnBlur: true,
-    activeTintColor: Colors.pop
+    tabBarOptions: {
+        activeTintColor: Colors.pop
+    }
 });
 
 TabNavigator.path = '';
