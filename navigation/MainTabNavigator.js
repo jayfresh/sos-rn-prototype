@@ -2,6 +2,7 @@ import React from 'react';
 import { Platform } from 'react-native';
 import { createStackNavigator, createBottomTabNavigator } from 'react-navigation';
 
+import Colors from '../common/colors';
 import TabBarIcon from '../components/TabBarIcon';
 import HomeScreen from '../screens/HomeScreen';
 import NewBossScreen from '../screens/NewBossScreen';
@@ -76,7 +77,8 @@ const TabNavigator = createBottomTabNavigator({
   BossStack,
   QueensStack,
 }, {
-    resetOnBlur: true
+    resetOnBlur: true,
+    activeTintColor: Colors.pop
 });
 
 TabNavigator.path = '';
