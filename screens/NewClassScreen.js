@@ -4,10 +4,12 @@ import { Button, Input, Overlay, Text, ThemeProvider } from 'react-native-elemen
 import { Calendar } from 'react-native-calendars';
 
 import { db, firebase } from '../config';
+import Colors from '../common/colors';
 import commonStyles from '../common/styles';
 import theme from '../common/theme';
 
 const moment = require('moment-timezone');
+const DEFAULT_CLASS_TYPE = 'SOS BOSS';
 
 const addClass = function(data) {
     // make a datetime and duration from the date and time components
@@ -44,11 +46,29 @@ export default class NewClassScreen extends React.Component {
     componentDidMount() {
         console.log('NewClassScreen did mount');
         const userUID = this.props.navigation.getParam('userUID', null) || (firebase.auth().currentUser && firebase.auth().currentUser.uid);
-        this.setState({userUID});
+        // retrieve the BOSS's name so we can use it in the class name
+        db.collection('users').where('linkedUID', '==', userUID)
+        .get()
+        .then(querySnapshot => {
+            if (querySnapshot.length < 1) {
+                throw new Error('no matching Users found for UID ' + userUID);
+            }
+            querySnapshot.forEach(doc => {
+                const bossName = doc.data().firstname
+                this.setState({
+                    userUID,
+                    bossName
+                });
+            });
+        })
+        .catch(error => {
+            console.log('Error getting BOSS user: ', error);
+        });
     }
+    defaultClassName = () => this.state.bossName ? DEFAULT_CLASS_TYPE + ' with ' + this.state.bossName : DEFAULT_CLASS_TYPE;
     clearForm = () => {
         this.setState({
-            name: '',
+            name: this.defaultClassName(),
             location: '',
             datetime: '',
             selectedDate: null,
@@ -108,8 +128,10 @@ export default class NewClassScreen extends React.Component {
                     <ThemeProvider theme={theme}>
                         <Input
                             label='Class name'
-                            placeholder='SOS BOSS'
-                            value={this.state.name}
+                            disabled={true}
+                            disabledInputStyle={{color: Colors.black, opacity: 1}}
+                            placeholder={DEFAULT_CLASS_TYPE}
+                            value={this.defaultClassName()}
                             onChangeText={text => this.setState({name: text})}
                         />
                         <Input
