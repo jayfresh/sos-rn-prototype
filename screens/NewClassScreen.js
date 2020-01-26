@@ -144,7 +144,7 @@ export default class NewClassScreen extends React.Component {
                             // Minimum date that can be selected, dates before minDate will be grayed out. Default = undefined
                             minDate={Date()}
                             // Marked dates affects which date shows up as selected on the calendar
-                            markedDates={{ [this.state.selectedDate]: { selected: true } }}
+                            markedDates={{ [this.state.selectedDate]: { selected: true, selectedColor: 'red' } }}
                             // Handler which gets executed on day press. Default = undefined
                             onDayPress={day => { this.setState({selectedDate: day.dateString}); }}
                             // Month format in calendar title. Formatting values: http://arshaw.com/xdate/#Formatting
@@ -155,6 +155,32 @@ export default class NewClassScreen extends React.Component {
                             onPressArrowLeft={subtractMonth => subtractMonth()}
                             // Handler which gets executed when press arrow icon right. It receive a callback can go next month
                             onPressArrowRight={addMonth => addMonth()}
+                            // Theme overrides
+                            theme={{
+                                // backgroundColor: '#ffffff',
+                                // calendarBackground: '#ffffff',
+                                // textSectionTitleColor: '#b6c1cd',
+                                // selectedDayBackgroundColor: '#00adf5',
+                                // selectedDayTextColor: '#ffffff',
+                                todayTextColor: Colors.pop,
+                                // dayTextColor: '#2d4150',
+                                // textDisabledColor: '#d9e1e8',
+                                // dotColor: '#00adf5',
+                                // selectedDotColor: '#ffffff',
+                                arrowColor: Colors.pop,
+                                // disabledArrowColor: '#d9e1e8',
+                                // monthTextColor: 'blue',
+                                // indicatorColor: 'blue',
+                                // textDayFontFamily: 'monospace',
+                                // textMonthFontFamily: 'monospace',
+                                // textDayHeaderFontFamily: 'monospace',
+                                // textDayFontWeight: '300',
+                                // textMonthFontWeight: 'bold',
+                                // textDayHeaderFontWeight: '300',
+                                // textDayFontSize: 16,
+                                // textMonthFontSize: 16,
+                                // textDayHeaderFontSize: 16
+                            }}
                         />
                         <Input
                             label='Start time'
