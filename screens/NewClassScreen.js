@@ -108,7 +108,7 @@ export default class NewClassScreen extends React.Component {
                     <ThemeProvider theme={theme}>
                         <Input
                             label='Class name'
-                            placeholder='SOS Boss'
+                            placeholder='SOS BOSS'
                             value={this.state.name}
                             onChangeText={text => this.setState({name: text})}
                         />

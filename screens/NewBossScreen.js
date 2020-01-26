@@ -20,7 +20,7 @@ const addUser = function(data) {
     });
 };
 
-export default class NewTeacherScreen extends React.Component {
+export default class NewBossScreen extends React.Component {
     state = {
         loading: false,
         firstname: '',
@@ -70,7 +70,7 @@ export default class NewTeacherScreen extends React.Component {
                             onBackdropPress={() => this.setState({ successOverlayVisible: false })}
                         >
                             <View style={{flex: 1, justifyContent: 'center'}}>
-                                <Text h3 style={commonStyles.overlayH3Text}>Teacher added!</Text>
+                                <Text h3 style={commonStyles.overlayH3Text}>BOSS added!</Text>
                                 <Button
                                     title='Back to admin'
                                     onPress={this.backToAdminPress}
@@ -87,7 +87,7 @@ export default class NewTeacherScreen extends React.Component {
                     )
                 }
                 <View>
-                    <Text h3 style={[commonStyles.headingText, {marginBottom: 20}]}>Add a new teacher</Text>
+                    <Text h3 style={[commonStyles.headingText, {marginBottom: 20}]}>Add a new BOSS</Text>
                     <ThemeProvider theme={theme}>
                         <Input
                             label='First name'

@@ -55,9 +55,9 @@ export default class HomeScreen extends React.Component {
                         <Text>BETA</Text>
                     </View>
                     <View style={styles.getStartedContainer}>
-                        <AddItem text='Add a teacher' onPress={() => this.onPress() } />
+                        <AddItem text='Add a BOSS' onPress={() => this.onPress() } />
                     </View>
-                    <Text style={{margin: 20}}>Teachers</Text>
+                    <Text style={{margin: 20}}>BOSSES</Text>
                     <Divider />
                     <View>
                         { this.state.userList && this.state.userList.map((l, i) => (
@@ -72,7 +72,7 @@ export default class HomeScreen extends React.Component {
                                 }}
                             />
                         ))}
-                        { this.state.userList && this.state.userList.length === 0 && <Text>No teachers</Text> }
+                        { this.state.userList && this.state.userList.length === 0 && <Text>No BOSSES</Text> }
                     </View>
                 </ScrollView>
             </View>
@@ -80,7 +80,7 @@ export default class HomeScreen extends React.Component {
     }
 
     onPress() {
-        this.props.navigation.navigate('NewTeacher');
+        this.props.navigation.navigate('NewBoss');
     }
 }
 

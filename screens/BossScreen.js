@@ -70,7 +70,7 @@ export default class BossScreen extends React.Component {
                             bottomDivider
                         />
                     ))}
-                    { this.state.classList && this.state.classList.length === 0 && <Text>No teachers</Text> }
+                    { this.state.classList && this.state.classList.length === 0 && <Text>No BOSSES</Text> }
                 </View>
             </ScrollView>
         );
@@ -81,5 +81,5 @@ export default class BossScreen extends React.Component {
 }
 
 BossScreen.navigationOptions = {
-    title: 'Hello Boss!',
+    title: 'Hey BOSS!',
 };

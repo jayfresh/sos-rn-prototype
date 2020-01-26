@@ -186,7 +186,7 @@ class SignInScreen extends React.Component {
                     />
                     <Text style={{alignSelf: 'center'}}>Hello {this.state.givenName}!
                     { this.state.isAdmin && ' You are an admin!'}
-                    { this.state.isBoss && ' You are a boss!'}</Text>
+                    { this.state.isBoss && ' You are a BOSS!'}</Text>
                 </View>
             )}
             <View style={{padding: 50}}>

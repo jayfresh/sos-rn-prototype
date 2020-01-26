@@ -1,8 +1,8 @@
-## The use of Stripe Connect to manage teacher accounts and take payments
+## The use of Stripe Connect to manage BOSS accounts and take payments
 
-### Registering teachers
+### Registering BOSSES
 
-This overview - https://stripe.com/docs/recipes/store-builder - demonstrates providing an OAuth-powered journey for a teacher to use
+This overview - https://stripe.com/docs/recipes/store-builder - demonstrates providing an OAuth-powered journey for a BOSS to use
 to register their own Stripe account, and shows how you can specify their account when you initiate payments.
 
 The guide references these pieces of data that come back at the end of the OAuth journey:
@@ -46,7 +46,7 @@ in the firestripe sample app - https://github.com/firebase/functions-samples/blo
   * note that a server-side call is required to setup a Checkout session for a Connected Account - https://stripe.com/docs/payments/checkout/connect
   * as noted here, the client-side only integration (as shown in the above article) is not compatiable with Connect - https://stripe.com/docs/payments/checkout/client
 * we could create a booking object in firestore when the customer clicks to book a class
-  * then a firebase function could respond to this and make the appropriate checkout session call (getting the connected account ID from the teacher's user record)
+  * then a firebase function could respond to this and make the appropriate checkout session call (getting the connected account ID from the BOSS's user record)
   * that session ID would be saved back on the booking, which the client would then see
   * the client could then redirect to the Checkout page
   * when the checkout is completed, a Stripe webhook can hit a firebase function, that can update the booking and (potentially) the client can pick up on this

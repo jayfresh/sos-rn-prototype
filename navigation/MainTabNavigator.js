@@ -4,7 +4,7 @@ import { createStackNavigator, createBottomTabNavigator } from 'react-navigation
 
 import TabBarIcon from '../components/TabBarIcon';
 import HomeScreen from '../screens/HomeScreen';
-import NewTeacherScreen from '../screens/NewTeacherScreen';
+import NewBossScreen from '../screens/NewBossScreen';
 import NewClassScreen from '../screens/NewClassScreen';
 import BossScreen from '../screens/BossScreen';
 import QueensScreen from '../screens/QueensScreen';
@@ -19,7 +19,7 @@ const config = Platform.select({
 const HomeStack = createStackNavigator(
   {
     Home: HomeScreen,
-    NewTeacher: NewTeacherScreen,
+    NewBoss: NewBossScreen,
   },
   config
 );
@@ -45,7 +45,7 @@ const BossStack = createStackNavigator(
 );
 
 BossStack.navigationOptions = {
-  tabBarLabel: 'Boss',
+  tabBarLabel: 'BOSS',
   tabBarIcon: ({ focused }) => (
     <TabBarIcon focused={focused} name={Platform.OS === 'ios' ? 'ios-rocket' : 'md-rocket'} />
   ),
