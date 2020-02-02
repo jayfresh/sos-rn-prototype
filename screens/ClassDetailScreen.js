@@ -78,35 +78,35 @@ export default class ClassDetailScreen extends React.Component {
     render() {
         console.log('ClassDetail render');
         return (
-            <ScrollView style={commonStyles.container}>
-                <NavigationEvents
-                    onWillFocus={payload => console.log('CDS will focus', payload)}
-                    onWillBlur={payload => console.log('CDS will blur', payload)}
-                    onDidFocus={() => this.onComponentFocus()}
-                    onDidBlur={payload => console.log('CDS did blur', payload)}
-                />
-            {
-                    this.state.successOverlayVisible && (
-                        <Overlay
-                            isVisible
-                            onBackdropPress={() => this.setState({ successOverlayVisible: false })}
-                        >
-                            <View style={{flex: 1, justifyContent: 'center'}}>
-                                <Text h3 style={commonStyles.overlayH3Text}>Class booked! See you on the dance floor</Text>
-                                <Button
-                                    title='Back to class list'
-                                    onPress={this.backButtonPress}
-                                    containerStyle={commonStyles.overlayButton}
-                                />
-                            </View>
-                        </Overlay>
-                    )
-                }
-                <View>
-                    <Text h3 style={[commonStyles.headingText, {marginBottom: 20}]}>{this.state.className}</Text>
-                    <Text style={commonStyles.bodyText}>Location: {this.state.classLocation}</Text>
-                    <Text style={commonStyles.bodyText}>Duration: {this.state.classDuration} minutes</Text>
-                    <ThemeProvider theme={theme}>
+            <ThemeProvider theme={theme}>
+                <ScrollView style={commonStyles.container}>
+                    <NavigationEvents
+                        onWillFocus={payload => console.log('CDS will focus', payload)}
+                        onWillBlur={payload => console.log('CDS will blur', payload)}
+                        onDidFocus={() => this.onComponentFocus()}
+                        onDidBlur={payload => console.log('CDS did blur', payload)}
+                    />
+                {
+                        this.state.successOverlayVisible && (
+                            <Overlay
+                                isVisible
+                                onBackdropPress={() => this.setState({ successOverlayVisible: false })}
+                            >
+                                <View style={{flex: 1, justifyContent: 'center'}}>
+                                    <Text h3 style={commonStyles.overlayH3Text}>Class booked! See you on the dance floor</Text>
+                                    <Button
+                                        title='Back to class list'
+                                        onPress={this.backButtonPress}
+                                        containerStyle={commonStyles.overlayButton}
+                                    />
+                                </View>
+                            </Overlay>
+                        )
+                    }
+                    <View>
+                        <Text h3 style={[commonStyles.headingText, {marginBottom: 20}]}>{this.state.className}</Text>
+                        <Text style={commonStyles.bodyText}>Location: {this.state.classLocation}</Text>
+                        <Text style={commonStyles.bodyText}>Duration: {this.state.classDuration} minutes</Text>
                         <Button
                             title={this.state.booked ? 'You\'re booked!' : 'Book class'}
                             type={this.state.booked ? 'clear' : 'solid'}
@@ -114,9 +114,9 @@ export default class ClassDetailScreen extends React.Component {
                             onPress={this.onPressSubmit}
                             loading={this.state.loading}
                         />
-                    </ThemeProvider>
-                </View>
-            </ScrollView>
+                    </View>
+                </ScrollView>
+            </ThemeProvider>
         );
     }
 }

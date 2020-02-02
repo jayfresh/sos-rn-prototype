@@ -14,6 +14,7 @@ export default StyleSheet.create({
   headingText: {
     fontSize: 16,
     fontFamily: 'archivo-black',
+    textTransform: 'uppercase',
     marginLeft: 15,
     marginTop: 9,
     marginBottom: 12,
@@ -30,7 +31,7 @@ export default StyleSheet.create({
     color: '#2e78b7',
   },
   overlayH3Text: {
-      marginBottom: 40
+      marginBottom: 40,
   },
   overlayButton: {
       marginVertical: 20

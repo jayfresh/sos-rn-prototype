@@ -25,7 +25,11 @@ const theme = {
     Text: {
         style: {
             fontFamily: 'montserrat',
-            // color: 'blue',
+        },
+        h3Style: {
+            fontFamily: 'archivo-black',
+            textTransform: 'uppercase',
+            fontWeight: 'normal', // we don't have bold, which is the default here
         }
     }
 };

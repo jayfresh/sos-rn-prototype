@@ -1,11 +1,12 @@
 import React from 'react';
 import { View, ScrollView, Text } from 'react-native';
 import { NavigationEvents } from 'react-navigation';
-import { Divider, ListItem } from 'react-native-elements';
+import { Divider, ListItem, ThemeProvider } from 'react-native-elements';
 
 import { db, firebase } from '../config';
 import AddItem from '../components/AddItem';
 import commonStyles from '../common/styles';
+import theme from '../common/theme';
 import { classTitle, classSubtitle } from '../common/utilities';
 
 export default class BossScreen extends React.Component {
@@ -49,30 +50,32 @@ export default class BossScreen extends React.Component {
     }
     render() {
         return (
-            <ScrollView style={commonStyles.container}>
-                <NavigationEvents
-                    onWillFocus={_ => this.onComponentFocus()}
-                    onWillBlur={_ => this.onComponentBlur()}
-                    onDidFocus={payload => console.log('did focus', payload)}
-                    onDidBlur={payload => console.log('did blur', payload)}
-                />
-                <AddItem text='Add a class' onPress={() => this.onPress()} />
-                <View>
-                    <Text style={commonStyles.headingText}>My classes{ this.state.userEmail ? ' (' + this.state.userEmail + ')' : ''}</Text>
-                </View>
-                <Divider />
-                <View>
-                    { this.state.classList && this.state.classList.map((c, i) => (
-                        <ListItem
-                            key={i}
-                            title={classTitle(c) + (c.bookings && c.bookings.length ? ` (${c.bookings.length} bookings)` : '')}
-                            subtitle={classSubtitle(c)}
-                            bottomDivider
-                        />
-                    ))}
-                    { this.state.classList && this.state.classList.length === 0 && <Text>No BOSSES</Text> }
-                </View>
-            </ScrollView>
+            <ThemeProvider theme={theme}>
+                <ScrollView style={commonStyles.container}>
+                    <NavigationEvents
+                        onWillFocus={_ => this.onComponentFocus()}
+                        onWillBlur={_ => this.onComponentBlur()}
+                        onDidFocus={payload => console.log('did focus', payload)}
+                        onDidBlur={payload => console.log('did blur', payload)}
+                    />
+                    <AddItem text='Add a class' onPress={() => this.onPress()} />
+                    <View>
+                        <Text style={commonStyles.headingText}>My classes{ this.state.userEmail ? ' (' + this.state.userEmail + ')' : ''}</Text>
+                    </View>
+                    <Divider />
+                    <View>
+                        { this.state.classList && this.state.classList.map((c, i) => (
+                            <ListItem
+                                key={i}
+                                title={classTitle(c) + (c.bookings && c.bookings.length ? ` (${c.bookings.length} bookings)` : '')}
+                                subtitle={classSubtitle(c)}
+                                bottomDivider
+                            />
+                        ))}
+                        { this.state.classList && this.state.classList.length === 0 && <Text>No BOSSES</Text> }
+                    </View>
+                </ScrollView>
+            </ThemeProvider>
         );
     }
     onPress() {
