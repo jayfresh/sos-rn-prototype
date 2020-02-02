@@ -60,6 +60,20 @@ in the firestripe sample app - https://github.com/firebase/functions-samples/blo
 
 See this page, at the bottom: https://stripe.com/docs/payments/save-and-reuse
 
+### Storing customers and cloning saved payment details
+
+This [page on the Stripe website](https://stripe.com/docs/connect/cloning-saved-payment-methods) explains how to create customers on the central platform account
+and clone a payment method for use with a connected account. This suggests a flow where the customer signs up centrally and adds their payment method, then we clone
+that on to the connected account before they make a purchase. This will presumably also make it easier to purchase services from the central account.
+
+This [page](https://stripe.com/docs/payments/checkout/collecting) explains how to create a Checkout Session that will collect payment details, not make a payment,
+which could be useful for providing a Stripe-hosted interface for setting a customer up with payment details. This page also shows how to use a Customer object
+you've previously saved (I assume using the method in the previous paragraph).
+
+We can save payment details during checkout - explanation [here](https://stripe.com/docs/payments/checkout/one-time#setup-future-usage). There is also a
+[guide to creating more payments](https://stripe.com/docs/payments/save-after-payment#web-create-payment-intent-off-session) with these details, avoiding
+another Stripe Checkout Session, and an explanation of what to do if the subsequent payments fail and need the customer to re-authorise, for example.
+
 ## Handling roles
 
 ### Handling roles within the interface
