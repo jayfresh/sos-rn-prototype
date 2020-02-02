@@ -4,13 +4,13 @@ import {
   Platform,
   ScrollView,
   StyleSheet,
-  Text,
   View,
 } from 'react-native';
-import { Divider, ListItem } from 'react-native-elements';
+import { Divider, ListItem, Text, ThemeProvider } from 'react-native-elements';
 
 import { db } from '../config';
 import commonStyles from '../common/styles';
+import theme from '../common/theme';
 import AddItem from '../components/AddItem';
 
 let list = null;
@@ -43,39 +43,41 @@ export default class HomeScreen extends React.Component {
     }
     render() {
         return (
-            <View style={commonStyles.container}>
-                <ScrollView
-                    style={commonStyles.container}
-                    contentContainerStyle={styles.contentContainer}>
-                    <View style={styles.welcomeContainer}>
-                        <Image
-                            source={require('../assets/images/sos_icon.png')}
-                            style={styles.welcomeImage}
-                        />
-                        <Text>BETA</Text>
-                    </View>
-                    <View style={styles.getStartedContainer}>
-                        <AddItem text='Add a BOSS' onPress={() => this.onPress() } />
-                    </View>
-                    <Text style={{margin: 20}}>BOSSES</Text>
-                    <Divider />
-                    <View>
-                        { this.state.userList && this.state.userList.map((l, i) => (
-                            <ListItem
-                                key={i}
-                                leftAvatar={{ source: { uri: l.photoURL } }}
-                                title={l.firstname + ' ' + l.lastname}
-                                subtitle={l.email}
-                                bottomDivider
-                                onPress={_ => {
-                                    this.props.navigation.navigate('Boss', {userEmail: l.email, userUID: l.linkedUID});
-                                }}
+            <ThemeProvider theme={theme}>
+                <View style={commonStyles.container}>
+                    <ScrollView
+                        style={commonStyles.container}
+                        contentContainerStyle={styles.contentContainer}>
+                        <View style={styles.welcomeContainer}>
+                            <Image
+                                source={require('../assets/images/sos_icon.png')}
+                                style={styles.welcomeImage}
                             />
-                        ))}
-                        { this.state.userList && this.state.userList.length === 0 && <Text>No BOSSES</Text> }
-                    </View>
-                </ScrollView>
-            </View>
+                            <Text>BETA</Text>
+                        </View>
+                        <View style={styles.getStartedContainer}>
+                            <AddItem text='Add a BOSS' onPress={() => this.onPress() } />
+                        </View>
+                        <Text style={{margin: 20}}>BOSSES</Text>
+                        <Divider />
+                        <View>
+                            { this.state.userList && this.state.userList.map((l, i) => (
+                                <ListItem
+                                    key={i}
+                                    leftAvatar={{ source: { uri: l.photoURL } }}
+                                    title={l.firstname + ' ' + l.lastname}
+                                    subtitle={l.email}
+                                    bottomDivider
+                                    onPress={_ => {
+                                        this.props.navigation.navigate('Boss', {userEmail: l.email, userUID: l.linkedUID});
+                                    }}
+                                />
+                            ))}
+                            { this.state.userList && this.state.userList.length === 0 && <Text>No BOSSES</Text> }
+                        </View>
+                    </ScrollView>
+                </View>
+            </ThemeProvider>
         );
     }
 

@@ -13,6 +13,7 @@ export default StyleSheet.create({
   },
   headingText: {
     fontSize: 16,
+    fontFamily: 'archivo-black',
     marginLeft: 15,
     marginTop: 9,
     marginBottom: 12,

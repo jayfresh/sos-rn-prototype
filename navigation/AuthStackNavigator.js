@@ -223,4 +223,14 @@ class SignInScreen extends React.Component {
 
 export default createStackNavigator({
     SignIn: SignInScreen
+}, {
+    defaultNavigationOptions: {
+      headerStyle: {
+        backgroundColor: Colors.pop,
+      },
+      headerTitleStyle: {
+        color: Colors.white,
+        fontFamily: 'montserrat'
+      },
+    }
 });

@@ -1,11 +1,13 @@
 import React from 'react';
 import { View, Text, StyleSheet, Platform } from 'react-native';
+import { withTheme } from 'react-native-elements';
 import Touchable from 'react-native-platform-touchable';
 
 import TabBarIcon from '../components/TabBarIcon';
 
-export default class AddItem extends React.Component {
+class AddItem extends React.Component {
     render() {
+        const { theme } = this.props;
         return (
             <View>
                 <Touchable
@@ -17,7 +19,7 @@ export default class AddItem extends React.Component {
                         <TabBarIcon name={Platform.OS === 'ios' ? 'ios-add-circle-outline' : 'md-add-circle-outline'} />
                     </View>
                     <View style={styles.optionTextContainer}>
-                        <Text style={styles.optionText}>{this.props.text}</Text>
+                        <Text style={[theme.Text.style, styles.optionText]}>{this.props.text}</Text>
                     </View>
                 </View>
                 </Touchable>
@@ -47,3 +49,5 @@ const styles = StyleSheet.create({
     marginTop: 1,
   },
 });
+
+export default withTheme(AddItem);

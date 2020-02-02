@@ -14,7 +14,17 @@ import CheckoutScreen from '../screens/CheckoutScreen';
 
 const config = Platform.select({
   web: { headerMode: 'screen' },
-  default: {},
+  default: {
+    defaultNavigationOptions: {
+      headerStyle: {
+        backgroundColor: Colors.pop,    
+      },
+      headerTitleStyle: {
+        color: Colors.white,
+        fontFamily: 'montserrat'
+      },
+    }
+  },
 });
 
 const HomeStack = createStackNavigator(
@@ -79,7 +89,10 @@ const TabNavigator = createBottomTabNavigator({
 }, {
     resetOnBlur: true,
     tabBarOptions: {
-        activeTintColor: Colors.pop
+        activeTintColor: Colors.pop,
+        labelStyle: {
+            fontFamily: 'montserrat',
+        }
     }
 });
 

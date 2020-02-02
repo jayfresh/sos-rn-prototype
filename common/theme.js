@@ -3,10 +3,10 @@ import Colors from './colors';
 const theme = {
     Input: {
         containerStyle: {
-            marginBottom: 20
+            marginBottom: 20,
         },
         labelStyle: {
-            color: Colors.black
+            color: Colors.black,
         }
     },
     Button: {
@@ -15,7 +15,17 @@ const theme = {
             paddingVertical: 20,
         },
         buttonStyle: {
-            backgroundColor: Colors.pop
+            backgroundColor: Colors.pop,
+        },
+        titleStyle: {
+            fontFamily: 'archivo-black',
+            textTransform: 'uppercase',
+        }
+    },
+    Text: {
+        style: {
+            fontFamily: 'montserrat',
+            // color: 'blue',
         }
     }
 };

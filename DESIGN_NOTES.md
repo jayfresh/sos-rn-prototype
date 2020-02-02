@@ -124,3 +124,18 @@ return admin.auth().setCustomUserClaims(user.uid, {
     moderator: true,
 });
 ```
+
+## Custom fonts
+
+The website uses:
+
+* Heebo, 700 (titles, uppercase)
+* Heebo, 400 (body copy)
+* Heebo, 500 (body STRONG tags)
+
+Font instructions are:
+
+* Archivo Black for titles and buttons - I have ArchivoBlack-Regular.ttf.
+* Monserrat for body copy - I have Monserrat-Regular.ttf
+
+Instructions for custom font use are here: https://docs.expo.io/versions/latest/guides/using-custom-fonts/
