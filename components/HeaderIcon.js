@@ -1,5 +1,5 @@
 import React from 'react';
-import { Image } from 'react-native-elements';
+import { Image } from 'react-native';
 
 export default HeaderIcon = () => (
     <Image

@@ -13,9 +13,9 @@
     "orientation": "portrait",
     "icon": "./assets/images/sos_icon.png",
     "splash": {
-      "image": "./assets/images/sos_icon.png",
+      "image": "./assets/images/fearless_woman.png",
       "resizeMode": "contain",
-      "backgroundColor": "#000000"
+      "backgroundColor": "#FFF"
     },
     "updates": {
       "fallbackToCacheTimeout": 0

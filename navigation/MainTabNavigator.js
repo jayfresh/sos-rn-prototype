@@ -82,7 +82,7 @@ const QueensStack = createStackNavigator(
 QueensStack.navigationOptions = {
   tabBarLabel: 'Queens',
   tabBarIcon: ({ focused }) => (
-    <TabBarIcon focused={focused} name={Platform.OS === 'ios' ? 'ios-flame' : 'md-flame'} />
+    <TabBarIcon focused={focused} name={'sos_crown'} />
   ),
 };
 
