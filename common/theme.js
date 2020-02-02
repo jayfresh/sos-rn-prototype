@@ -5,8 +5,14 @@ const theme = {
         containerStyle: {
             marginBottom: 20,
         },
+        inputStyle: {
+            fontFamily: 'montserrat',
+        },
         labelStyle: {
             color: Colors.black,
+            fontFamily: 'montserrat',
+            textTransform: 'uppercase',
+            fontWeight: 'normal',
         }
     },
     Button: {
@@ -20,6 +26,7 @@ const theme = {
         titleStyle: {
             fontFamily: 'archivo-black',
             textTransform: 'uppercase',
+            color: Colors.white,
         }
     },
     Text: {

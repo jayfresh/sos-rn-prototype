@@ -55,10 +55,8 @@ export default class HomeScreen extends React.Component {
                             />
                             <Text>BETA</Text>
                         </View>
-                        <View style={styles.getStartedContainer}>
-                            <AddItem text='Add a BOSS' onPress={() => this.onPress() } />
-                        </View>
-                        <Text style={{margin: 20}}>BOSSES</Text>
+                        <AddItem text='Add a BOSS' onPress={() => this.onPress() } />
+                        <Text style={commonStyles.headingText}>BOSSES</Text>
                         <Divider />
                         <View>
                             { this.state.userList && this.state.userList.map((l, i) => (
@@ -105,10 +103,6 @@ const styles = StyleSheet.create({
     resizeMode: 'contain',
     marginTop: 3,
     marginLeft: -10,
-  },
-  getStartedContainer: {
-    alignItems: 'center',
-    marginHorizontal: 50,
   },
   homeScreenFilename: {
     marginVertical: 7,

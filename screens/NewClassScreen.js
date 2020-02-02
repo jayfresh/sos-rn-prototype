@@ -99,33 +99,33 @@ export default class NewClassScreen extends React.Component {
     };
     render() {
         return (
-            <ScrollView style={commonStyles.container}>
-            {
-                    this.state.successOverlayVisible && (
-                        <Overlay
-                            isVisible
-                            onBackdropPress={() => this.setState({ successOverlayVisible: false })}
-                        >
-                            <View style={{flex: 1, justifyContent: 'center'}}>
-                                <Text h3 style={commonStyles.overlayH3Text}>Class added!</Text>
-                                <Button
-                                    title='Back to class list'
-                                    onPress={this.backButtonPress}
-                                    containerStyle={commonStyles.overlayButton}
-                                />
-                                <Button
-                                    title='Add more'
-                                    type='outline'
-                                    onPress={this.addMoreButtonPress}
-                                    containerStyle={commonStyles.overlayButton}
-                                />
-                            </View>
-                        </Overlay>
-                    )
-                }
-                <View>
-                    <Text h3 style={[commonStyles.headingText, {marginBottom: 20}]}>Add a new class</Text>
-                    <ThemeProvider theme={theme}>
+            <ThemeProvider theme={theme}>
+                <ScrollView style={commonStyles.container}>
+                {
+                        this.state.successOverlayVisible && (
+                            <Overlay
+                                isVisible
+                                onBackdropPress={() => this.setState({ successOverlayVisible: false })}
+                            >
+                                <View style={{flex: 1, justifyContent: 'center'}}>
+                                    <Text h3 style={commonStyles.overlayH3Text}>Class added!</Text>
+                                    <Button
+                                        title='Back to class list'
+                                        onPress={this.backButtonPress}
+                                        containerStyle={commonStyles.overlayButton}
+                                    />
+                                    <Button
+                                        title='Add more'
+                                        type='outline'
+                                        onPress={this.addMoreButtonPress}
+                                        containerStyle={commonStyles.overlayButton}
+                                    />
+                                </View>
+                            </Overlay>
+                        )
+                    }
+                    <View>
+                        <Text h3 style={[commonStyles.headingText, {marginBottom: 20}]}>Add a new class</Text>
                         <Input
                             label='Class name'
                             disabled={true}
@@ -171,9 +171,9 @@ export default class NewClassScreen extends React.Component {
                                 // disabledArrowColor: '#d9e1e8',
                                 // monthTextColor: 'blue',
                                 // indicatorColor: 'blue',
-                                // textDayFontFamily: 'monospace',
-                                // textMonthFontFamily: 'monospace',
-                                // textDayHeaderFontFamily: 'monospace',
+                                textDayFontFamily: 'montserrat',
+                                textMonthFontFamily: 'montserrat',
+                                textDayHeaderFontFamily: 'montserrat',
                                 // textDayFontWeight: '300',
                                 // textMonthFontWeight: 'bold',
                                 // textDayHeaderFontWeight: '300',
@@ -199,9 +199,9 @@ export default class NewClassScreen extends React.Component {
                             onPress={this.onPressSubmit}
                             loading={this.state.loading}
                         />
-                    </ThemeProvider>
-                </View>
-            </ScrollView>
+                    </View>
+                </ScrollView>
+            </ThemeProvider>
         );
     }
 }

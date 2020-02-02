@@ -34,6 +34,6 @@ export default StyleSheet.create({
       marginBottom: 40,
   },
   overlayButton: {
-      marginVertical: 20
+      marginVertical: 20,
   }
 });

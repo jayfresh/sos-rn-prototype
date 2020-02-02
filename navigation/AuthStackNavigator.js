@@ -1,7 +1,7 @@
 
 import React from 'react';
 import { View } from 'react-native';
-import { Avatar, Button, Text, ThemeProvider } from 'react-native-elements';
+import { Avatar, Button, Image, Text, ThemeProvider } from 'react-native-elements';
 import { createStackNavigator } from 'react-navigation';
 import { Linking } from 'expo';
 import * as Facebook from 'expo-facebook';
@@ -230,7 +230,14 @@ export default createStackNavigator({
       },
       headerTitleStyle: {
         color: Colors.white,
-        fontFamily: 'montserrat'
+        fontFamily: 'archivo-black',
+        textTransform: 'uppercase',
       },
+      headerRight: (
+        <Image
+          source={require('../assets/images/sos_icon.png')}
+          style={{height: 50, width: 50}}
+        />
+      ),
     }
 });

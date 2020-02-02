@@ -1,5 +1,6 @@
 import React from 'react';
 import { Platform } from 'react-native';
+import { Image } from 'react-native-elements';
 import { createStackNavigator, createBottomTabNavigator } from 'react-navigation';
 
 import Colors from '../common/colors';
@@ -21,8 +22,15 @@ const config = Platform.select({
       },
       headerTitleStyle: {
         color: Colors.white,
-        fontFamily: 'montserrat'
+        fontFamily: 'archivo-black',
+        textTransform: 'uppercase',
       },
+      headerRight: (
+        <Image
+          source={require('../assets/images/sos_icon.png')}
+          style={{height: 50, width: 50}}
+        />
+      ),
     }
   },
 });

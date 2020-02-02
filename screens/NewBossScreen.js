@@ -62,33 +62,33 @@ export default class NewBossScreen extends React.Component {
     };
     render() {
         return (
-            <ScrollView style={commonStyles.container}>
-                {
-                    this.state.successOverlayVisible && (
-                        <Overlay
-                            isVisible
-                            onBackdropPress={() => this.setState({ successOverlayVisible: false })}
-                        >
-                            <View style={{flex: 1, justifyContent: 'center'}}>
-                                <Text h3 style={commonStyles.overlayH3Text}>BOSS added!</Text>
-                                <Button
-                                    title='Back to admin'
-                                    onPress={this.backToAdminPress}
-                                    containerStyle={commonStyles.overlayButton}
-                                />
-                                <Button
-                                    title='Add more'
-                                    type='outline'
-                                    onPress={this.addMoreButtonPress}
-                                    containerStyle={commonStyles.overlayButton}
-                                />
-                            </View>
-                        </Overlay>
-                    )
-                }
-                <View>
-                    <Text h3 style={[commonStyles.headingText, {marginBottom: 20}]}>Add a new BOSS</Text>
-                    <ThemeProvider theme={theme}>
+            <ThemeProvider theme={theme}>
+                <ScrollView style={commonStyles.container}>
+                    {
+                        this.state.successOverlayVisible && (
+                            <Overlay
+                                isVisible
+                                onBackdropPress={() => this.setState({ successOverlayVisible: false })}
+                            >
+                                <View style={{flex: 1, justifyContent: 'center'}}>
+                                    <Text h3 style={commonStyles.overlayH3Text}>BOSS added!</Text>
+                                    <Button
+                                        title='Back to admin'
+                                        onPress={this.backToAdminPress}
+                                        containerStyle={commonStyles.overlayButton}
+                                    />
+                                    <Button
+                                        title='Add more'
+                                        type='outline'
+                                        onPress={this.addMoreButtonPress}
+                                        containerStyle={commonStyles.overlayButton}
+                                    />
+                                </View>
+                            </Overlay>
+                        )
+                    }
+                    <View>
+                        <Text h3 style={[commonStyles.headingText, {marginBottom: 20}]}>Add a new BOSS</Text>
                         <Input
                             label='First name'
                             placeholder='Beyoncé'
@@ -115,9 +115,9 @@ export default class NewBossScreen extends React.Component {
                             onPress={this.onPressSubmit}
                             loading={this.state.loading}
                         />
-                    </ThemeProvider>
-                </View>
-            </ScrollView>
+                    </View>
+                </ScrollView>
+            </ThemeProvider>
         );
     }
 }
