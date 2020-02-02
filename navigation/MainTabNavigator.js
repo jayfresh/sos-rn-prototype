@@ -4,6 +4,7 @@ import { Image } from 'react-native-elements';
 import { createStackNavigator, createBottomTabNavigator } from 'react-navigation';
 
 import Colors from '../common/colors';
+import HeaderIcon from '../components/HeaderIcon';
 import TabBarIcon from '../components/TabBarIcon';
 import HomeScreen from '../screens/HomeScreen';
 import NewBossScreen from '../screens/NewBossScreen';
@@ -26,10 +27,7 @@ const config = Platform.select({
         textTransform: 'uppercase',
       },
       headerRight: (
-        <Image
-          source={require('../assets/images/sos_icon.png')}
-          style={{height: 50, width: 50}}
-        />
+        <HeaderIcon />
       ),
     }
   },

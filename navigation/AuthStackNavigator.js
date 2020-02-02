@@ -11,6 +11,7 @@ import Colors from '../common/colors';
 import theme from '../common/theme';
 import { db, firebase } from '../config';
 import getEnvVars from '../environment';
+import HeaderIcon from '../components/HeaderIcon';
 
 const { facebookConfig } = getEnvVars();
 
@@ -234,10 +235,7 @@ export default createStackNavigator({
         textTransform: 'uppercase',
       },
       headerRight: (
-        <Image
-          source={require('../assets/images/sos_icon.png')}
-          style={{height: 50, width: 50}}
-        />
+        <HeaderIcon />
       ),
     }
 });
