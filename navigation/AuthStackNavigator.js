@@ -12,6 +12,7 @@ import theme from '../common/theme';
 import { db, firebase } from '../config';
 import getEnvVars from '../environment';
 import HeaderIcon from '../components/HeaderIcon';
+import TabBarIcon from '../components/TabBarIcon';
 
 const { facebookConfig } = getEnvVars();
 
@@ -180,17 +181,23 @@ class SignInScreen extends React.Component {
         <ThemeProvider theme={theme}>
             <View style={{display: 'flex', flex: 1, justifyContent: 'center'}}>
                 { this.state.loggedIn && (
-                    <View style={{display: 'flex', flexDirection: 'row', padding: 50}}>
-                        <Avatar
-                            rounded
-                            source={{
-                                uri: this.state.picture
-                            }}
-                            containerStyle={{marginRight: 20}}
-                        />
-                        <Text style={{alignSelf: 'center'}}>Hey {this.state.givenName}!
-                        { this.state.isAdmin && ' You are an admin!'}
-                        { this.state.isBoss && ' You are a BOSS!'}</Text>
+                    <View>
+                        <View style={{display: 'flex', flexDirection: 'row', justifyContent: 'center', paddingHorizontal: 50, paddingTop: 50}}>
+                            <Avatar
+                                rounded
+                                source={{
+                                    uri: this.state.picture
+                                }}
+                                containerStyle={{marginRight: 20}}
+                            />
+                            <Text style={{alignSelf: 'center'}}>Hey {this.state.givenName}!</Text>
+                        </View>
+                        <View style={{display: 'flex', flexDirection: 'row', justifyContent: 'center', alignItems: 'center', paddingTop: 20}}>
+                            { this.state.isAdmin && <View style={{marginRight: 10}}>
+                                <TabBarIcon name={Platform.OS === 'ios' ? 'ios-school' : 'md-school'} />
+                            </View>}
+                            { this.state.isBoss && <TabBarIcon style={{alignSelf: 'center'}} name={'sos_crown'} />}
+                        </View>
                     </View>
                 )}
                 <View style={{padding: 50}}>

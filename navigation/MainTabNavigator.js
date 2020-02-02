@@ -64,7 +64,7 @@ const BossStack = createStackNavigator(
 BossStack.navigationOptions = {
   tabBarLabel: 'BOSS',
   tabBarIcon: ({ focused }) => (
-    <TabBarIcon focused={focused} name={Platform.OS === 'ios' ? 'ios-rocket' : 'md-rocket'} />
+    <TabBarIcon focused={focused} name={'fearless_woman'} />
   ),
 };
 
