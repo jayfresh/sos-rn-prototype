@@ -1,3 +1,5 @@
+# Design notes
+
 ## The use of Stripe Connect to manage BOSS accounts and take payments
 
 ### Registering BOSSES
@@ -153,3 +155,29 @@ Font instructions are:
 * Monserrat for body copy - I have Monserrat-Regular.ttf
 
 Instructions for custom font use are here: https://docs.expo.io/versions/latest/guides/using-custom-fonts/
+
+## App builds and pre-release testing
+
+Expo has a build service, that will build APKs and IPAs for you. More detail here: https://docs.expo.io/versions/latest/distribution/building-standalone-apps/.
+
+Firebase has their App Distribution service, which takes in APKs and IPAs and distributes to Android and iOS testers without using app stores. More info here:
+https://firebase.google.com/docs/app-distribution
+
+Notes on app.json customisation:
+- `android.permissions` has been set to `[]` to avoid asking for more permissions than are needed
+- for standalone apps, some extra config is required for the Facebook login to work, see here: https://docs.expo.io/versions/v36.0.0/sdk/facebook/
+- have added "sos" as a linking scheme, but at time of writing this doesn't seem to be necessary for either the Checkout WebView or the Facebook login
+
+Misc note: Bitrise integrates with Firebase App Distribution, which might be relevant if we used that to do builds.
+
+## Offline behaviour
+
+Expo includes some configuration for offline behaviour. See https://docs.expo.io/versions/latest/guides/offline-support/.
+
+These have been set:
+- `updates.fallbackToCacheTimeout` is set to `0` in app.json, which causes updated JS to be downloaded in the background and stored for future use (this behaviour is
+very clear when using the Expo client, as after publishing you have to load the app a second time to see the updates)
+- assets are cached during app load, using `Font.loadAsync` and `Asset.loadAsync`
+- assets are bundled into the built binary using `"assetBundlePatterns": ["assets/*/*"]` in app.json
+  - depending on the app binary size, we could leave the images out and cache them on load
+  - fonts are needed from the start to avoid FOUC

@@ -31,8 +31,10 @@ export default function App(props) {
 async function loadResourcesAsync() {
   await Promise.all([
     Asset.loadAsync([
-      require('./assets/images/sos_icon.png'),
+      require('./assets/images/fearless_woman.png'),
+      require('./assets/images/sos_crown_icon.png'),
       require('./assets/images/sos_icon_white.png'),
+      require('./assets/images/sos_icon.png'),
     ]),
     Font.loadAsync({
       // This is the font that we are using for our tab bar

@@ -1,8 +1,9 @@
 {
   "expo": {
-    "name": "SOS React Native prototype",
-    "slug": "sos-react-native-prototype",
-    "privacy": "public",
+    "name": "School of SOS prototype",
+    "description": "Prototype School of SOS app for BOSSES and QUEENS",
+    "slug": "expo.io/@jayfresh/school-of-sos-prototype",
+    "privacy": "unlisted",
     "sdkVersion": "36.0.0",
     "platforms": [
       "ios",
@@ -12,6 +13,7 @@
     "version": "0.0.1",
     "orientation": "portrait",
     "icon": "./assets/images/sos_icon.png",
+    "scheme": "sos",
     "splash": {
       "image": "./assets/images/fearless_woman.png",
       "resizeMode": "contain",
@@ -21,10 +23,20 @@
       "fallbackToCacheTimeout": 0
     },
     "assetBundlePatterns": [
-      "**/*"
+      "assets/*/*"
     ],
     "ios": {
-      "supportsTablet": true
-    }
+      "supportsTablet": false,
+      "bundleIdentifier": "com.schoolofsos.school-of-sos-prototype",
+      "buildNumber": "0.0.1"
+    },
+    "android": {
+      "package": "com.schoolofsos.school-of-sos-prototype",
+      "versionCode": 1,
+      "permissions": []
+    },
+    "facebookAppId": "2386090444975358",
+    "facebookDisplayName": "SOS RN Prototype",
+    "facebookScheme": "fb2386090444975358"
   }
 }
