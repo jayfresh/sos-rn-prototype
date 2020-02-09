@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "3320584924",
+    "firebase_url": "https://sos-rn-prototype.firebaseio.com",
+    "project_id": "sos-rn-prototype",
+    "storage_bucket": "sos-rn-prototype.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:3320584924:android:6256f453d9bc2b849fb219",
+        "android_client_info": {
+          "package_name": "com.schoolofsos.school_of_sos_prototype"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "3320584924-jli7f1ce08atbl1u9hhni4ae8n60u8on.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBFRgACFkav2coW6GBchaome9CLxRsLvk8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "3320584924-jli7f1ce08atbl1u9hhni4ae8n60u8on.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

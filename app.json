@@ -2,7 +2,7 @@
   "expo": {
     "name": "School of SOS prototype",
     "description": "Prototype School of SOS app for BOSSES and QUEENS",
-    "slug": "expo.io/@jayfresh/school-of-sos-prototype",
+    "slug": "school-of-sos-prototype",
     "privacy": "unlisted",
     "sdkVersion": "36.0.0",
     "platforms": [
@@ -28,10 +28,12 @@
     "ios": {
       "supportsTablet": false,
       "bundleIdentifier": "com.schoolofsos.school-of-sos-prototype",
-      "buildNumber": "0.0.1"
+      "buildNumber": "0.0.1",
+      "googleServicesFile": "./GoogleService-Info.plist"
     },
     "android": {
-      "package": "com.schoolofsos.school-of-sos-prototype",
+      "package": "com.schoolofsos.school_of_sos_prototype",
+      "googleServicesFile": "./google-services.json",
       "versionCode": 1,
       "permissions": []
     },

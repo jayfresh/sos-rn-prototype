@@ -159,6 +159,8 @@ Instructions for custom font use are here: https://docs.expo.io/versions/latest/
 ## App builds and pre-release testing
 
 Expo has a build service, that will build APKs and IPAs for you. More detail here: https://docs.expo.io/versions/latest/distribution/building-standalone-apps/.
+Note, when building for Android, use `expo build:android -t apk` to build an APK not an Android App Bundle. After the first build, run `expo fetch:android:keystore`
+and store the resulting keystore securely.
 
 Firebase has their App Distribution service, which takes in APKs and IPAs and distributes to Android and iOS testers without using app stores. More info here:
 https://firebase.google.com/docs/app-distribution
@@ -167,6 +169,19 @@ Notes on app.json customisation:
 - `android.permissions` has been set to `[]` to avoid asking for more permissions than are needed
 - for standalone apps, some extra config is required for the Facebook login to work, see here: https://docs.expo.io/versions/v36.0.0/sdk/facebook/
 - have added "sos" as a linking scheme, but at time of writing this doesn't seem to be necessary for either the Checkout WebView or the Facebook login
+- for each build, you have to increment `android.versionCode` and `ios.buildNumber`
+- `ios.googleServicesFile` and `android.googleServicesFile` are required for use with Firebase
+  - NB: the Expo docs say that including `android.googleServicesFile` automatically switches on Firebase Cloud Messaging - but we're not requesting that in the permissions,
+    so we'll have to see whether that forces a request of those permissions...
+
+App store notes:
+- Google Play costs $25 to register, which is a one-off fee
+  - Expo can build for Android without requiring a Google Play account
+- Apple App Store costs $99 per year
+- there is a recommendation (here)[https://docs.expo.io/versions/latest/distribution/app-signing/], to opt into Google Play App Signing,
+so that the expo-generated signing key is treated as an "upload key" by Google, and Google Play has a separate "app signing key". This allows the use of
+Android App Bundles for builds, and provides some security and benefits and the ability to reset an upload key if you lose it. However, Firebase App
+Distribution currently says that APKs have to be signed with a debug key or app signing key, so we're avoiding Google Play App Signing for now.
 
 Misc note: Bitrise integrates with Firebase App Distribution, which might be relevant if we used that to do builds.
 
