@@ -64,8 +64,10 @@ class ClassDetailScreen extends React.Component {
     };
     refreshCustomerList = bookingIds => {
         if (!bookingIds || !bookingIds.length) { return; }
+        // filter out any nulls as you can't query with nulls in
+        const bookingIdsForQuery = bookingIds.filter(id => id);
         // if there is no linked user for a booking for some reason, show it as "unknown"
-        db.collection('users').where('linkedUID', 'in', bookingIds)
+        db.collection('users').where('linkedUID', 'in', bookingIdsForQuery)
         .get()
         .then(querySnapshot => {
             var mappedBookings = [];
@@ -150,7 +152,7 @@ class ClassDetailScreen extends React.Component {
                             onPress={this.onPressSubmit}
                             loading={this.state.loading}
                         />
-                        {this.state.bossMode && this.props.context.canBoss() && (
+                        {this.state.bossMode && this.props.context.RoleManager.canBoss() && (
                             <View>
                                 <Text style={commonStyles.headingText}>Bookings ({this.state.classBookingCount})</Text>
                                 { this.state.mappedBookings && this.state.mappedBookings.map((b, i) => (

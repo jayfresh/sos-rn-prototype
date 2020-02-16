@@ -101,7 +101,7 @@ class SignInScreen extends React.Component {
             isAdmin: !!claims.admin
         });
         var roles = Object.keys(claims);
-        this.props.context.setRoles(roles);
+        this.props.context.RoleManager.setRoles(roles);
     };
 
     _loginWithFacebook = async function () {

@@ -1,13 +1,19 @@
 import React, { createContext } from 'react'
+import RoleManager from './RoleManager';
 
-const Context = createContext({});
+const AppContext = createContext({});
 
-export const ContextProvider = Context.Provider;
+export const ContextProvider = AppContext.Provider;
 
-export const ContextConsumer = Context.Consumer;
+export const ContextConsumer = AppContext.Consumer;
 
 export const withContext = Component => props => (
   <ContextConsumer>
-    {state => <Component {...props} context={state} />}
+    {value => <Component {...props} context={value} />}
   </ContextConsumer>
 );
+
+export const context = {
+    RoleManager,
+    data: {}
+};

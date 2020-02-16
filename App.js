@@ -5,10 +5,8 @@ import React, { useState } from 'react';
 import { KeyboardAvoidingView, Platform, StatusBar, StyleSheet } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 
-import { ContextProvider } from './common/context';
+import { ContextProvider, context } from './common/context';
 import AppNavigator from './navigation/AppNavigator';
-
-import RoleManager from './common/RoleManager';
 
 export default function App(props) {
   const [isLoadingComplete, setLoadingComplete] = useState(false);
@@ -25,7 +23,7 @@ export default function App(props) {
     return (
       <KeyboardAvoidingView behavior='padding' style={styles.container}>
         {Platform.OS === 'ios' && <StatusBar barStyle="default" />}
-        <ContextProvider value={RoleManager}>
+        <ContextProvider value={context}>
             <AppNavigator />
         </ContextProvider>
       </KeyboardAvoidingView>
