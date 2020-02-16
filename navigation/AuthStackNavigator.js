@@ -8,6 +8,7 @@ import * as Facebook from 'expo-facebook';
 import * as WebBrowser from 'expo-web-browser';
 
 import Colors from '../common/colors';
+import { withContext } from '../common/context';
 import theme from '../common/theme';
 import { db, firebase } from '../config';
 import getEnvVars from '../environment';
@@ -99,6 +100,8 @@ class SignInScreen extends React.Component {
             isBoss: !!claims.boss,
             isAdmin: !!claims.admin
         });
+        var roles = Object.keys(claims);
+        this.props.context.setRoles(roles);
     };
 
     _loginWithFacebook = async function () {
@@ -230,7 +233,7 @@ class SignInScreen extends React.Component {
 }
 
 export default createStackNavigator({
-    SignIn: SignInScreen
+    SignIn: withContext(SignInScreen)
 }, {
     defaultNavigationOptions: {
       headerStyle: {
