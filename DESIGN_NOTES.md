@@ -97,6 +97,9 @@ which shows the use of a file of rules for each role, and then a `Can` component
 
 The implementation of handling roles is not great - the React Navigation tab navigator always shows at least one tab, but the tabs are role-dependent, so that's a start.
 
+Note: have also made use of the React Context API to store information about roles separately and provide it to components that need it. See use of `./common/context.js`
+and `./common/roleManager.js`. Helpful tutorial on this here: https://levelup.gitconnected.com/how-to-use-the-react-context-api-to-build-react-native-expo-and-firebase-apps-adda840e52b0.
+
 ### Granting roles to users
 
 Ideas for giving certain users roles:
