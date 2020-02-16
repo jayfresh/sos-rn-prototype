@@ -1,34 +1,46 @@
 import { AppLoading } from 'expo';
 import { Asset } from 'expo-asset';
 import * as Font from 'expo-font';
-import React, { useState } from 'react';
+import React from 'react';
 import { KeyboardAvoidingView, Platform, StatusBar, StyleSheet } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 
 import { ContextProvider, context } from './common/context';
 import AppNavigator from './navigation/AppNavigator';
 
-export default function App(props) {
-  const [isLoadingComplete, setLoadingComplete] = useState(false);
-
-  if (!isLoadingComplete && !props.skipLoadingScreen) {
-    return (
-      <AppLoading
-        startAsync={loadResourcesAsync}
-        onError={handleLoadingError}
-        onFinish={() => handleFinishLoading(setLoadingComplete)}
-      />
-    );
-  } else {
-    return (
-      <KeyboardAvoidingView behavior='padding' style={styles.container}>
-        {Platform.OS === 'ios' && <StatusBar barStyle="default" />}
-        <ContextProvider value={context}>
-            <AppNavigator />
-        </ContextProvider>
-      </KeyboardAvoidingView>
-    );
-  }
+class App extends React.Component {
+    constructor(props) {
+        super(props);
+        this.state = {
+            isLoadingComplete: false,
+            count: 0
+        };
+    }
+    setLoadingComplete() {
+        this.setState({
+            isLoadingComplete: true
+        });
+    }
+    render() {
+        if (!this.state.isLoadingComplete && !this.props.skipLoadingScreen) {
+          return (
+            <AppLoading
+              startAsync={loadResourcesAsync}
+              onError={handleLoadingError}
+              onFinish={() => this.setLoadingComplete()}
+            />
+          );
+        } else {
+          return (
+            <KeyboardAvoidingView behavior='padding' style={styles.container}>
+              {Platform.OS === 'ios' && <StatusBar barStyle="default" />}
+              <ContextProvider value={context}>
+                  <AppNavigator />
+              </ContextProvider>
+            </KeyboardAvoidingView>
+          );
+        }
+    }
 }
 
 async function loadResourcesAsync() {
@@ -57,13 +69,11 @@ function handleLoadingError(error) {
   console.warn(error);
 }
 
-function handleFinishLoading(setLoadingComplete) {
-  setLoadingComplete(true);
-}
-
 const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#fff',
   },
 });
+
+export default App;
