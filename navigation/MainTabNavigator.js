@@ -80,11 +80,22 @@ const QueensStack = createStackNavigator(
   config
 );
 
-QueensStack.navigationOptions = {
-  tabBarLabel: 'Queens',
-  tabBarIcon: ({ focused }) => (
-    <TabBarIcon focused={focused} name={'sos_crown'} />
-  ),
+QueensStack.navigationOptions = ({navigation}) => {
+    const parent = navigation.dangerouslyGetParent();
+    // switch on single tab view mode (no tabs showing) if neither isAdmin nor isBoss are active roles
+    const singleTabView =
+      parent &&
+      parent.state &&
+      parent.state.params &&
+      !parent.state.params.isAdmin &&
+      !parent.state.params.isBoss;
+    return {
+        tabBarLabel: 'Queens',
+        tabBarIcon: ({ focused }) => (
+          <TabBarIcon focused={focused} name={'sos_crown'} />
+        ),
+        tabBarVisible: !singleTabView
+    };
 };
 
 QueensStack.path = '';
@@ -129,17 +140,20 @@ class CustomNavigator extends React.Component {
             return true;
         });
         const activeIndex = navState.index;
-        console.log(navState);
-        console.log(filteredRoutes);
-        console.log(activeIndex);
-        return <TabNavigator navigation={{
+        const activeRoute = navState.routes[activeIndex];
+        let filteredActiveIndex = filteredRoutes.findIndex(route => route.routeName === activeRoute.routeName);
+        // When the app loads, the active route is index 0, which is HomeStack.
+        // This might not be in filtered routes, so default filteredActiveIndex to 0
+        if (filteredActiveIndex === -1) { filteredActiveIndex = 0 };
+        const newNavigation = {
           ...navigation,
           state: {
             ...navState,
             routes: filteredRoutes,
-            index: activeIndex,
+            index: filteredActiveIndex,
           }
-        }} />;
+        };
+        return <TabNavigator navigation={newNavigation} />;
     }
 }
 
