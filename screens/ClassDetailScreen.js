@@ -20,7 +20,8 @@ class ClassDetailScreen extends React.Component {
         classBookings: null,
         classBookingCount: 0,
         booked: false,
-        bossMode: false
+        bossMode: false,
+        mappedBookings: null
     };
     componentDidMount = () => {
         console.log('ClassDetailScreen did mount');
@@ -40,6 +41,10 @@ class ClassDetailScreen extends React.Component {
                 booked: c.bookings && c.bookings.includes(loggedInQueenId),
                 bossMode
             });
+            if (bossMode) {
+                // pass in c.bookings, because we can't rely on setState having completed by now, it can be async
+                this.refreshCustomerList(c.bookings);
+            }
         }
     }
     onComponentFocus = () => {
@@ -55,6 +60,31 @@ class ClassDetailScreen extends React.Component {
     onPressSubmit = () => {
         this.props.navigation.navigate('Checkout', {
             class: this.state.class
+        });
+    };
+    refreshCustomerList = bookingIds => {
+        if (!bookingIds || !bookingIds.length) { return; }
+        // if there is no linked user for a booking for some reason, show it as "unknown"
+        db.collection('users').where('linkedUID', 'in', bookingIds)
+        .get()
+        .then(querySnapshot => {
+            var mappedBookings = [];
+            var customerMap = {};
+            querySnapshot.forEach(doc => {
+                // doc.data() is never undefined for query doc snapshots
+                var data = doc.data();
+                customerMap[data.linkedUID] = data;
+            });
+            // fill out the mappedBookings including where there has been no match in the users table
+            bookingIds.forEach(id => {
+                mappedBookings.push(customerMap[id] || null);
+            });
+            this.setState({
+                mappedBookings
+            });
+        })
+        .catch(error => {
+            console.log('Error calling refreshCustomerList: ', error);
         });
     };
     onCheckoutSuccess = (classID, queenId) => {
@@ -123,10 +153,12 @@ class ClassDetailScreen extends React.Component {
                         {this.state.bossMode && this.props.context.canBoss() && (
                             <View>
                                 <Text style={commonStyles.headingText}>Bookings ({this.state.classBookingCount})</Text>
-                                { this.state.classBookings && this.state.classBookings.map((b, i) => (
+                                { this.state.mappedBookings && this.state.mappedBookings.map((b, i) => (
                                     <ListItem
                                         key={i}
-                                        title={b}
+                                        leftAvatar={b && { source: { uri: b.photoURL } }}
+                                        title={b ? b.firstname + ' ' + b.lastname : 'Unknown'}
+                                        subtitle={b && b.email}
                                         bottomDivider
                                     />
                                 ))}
