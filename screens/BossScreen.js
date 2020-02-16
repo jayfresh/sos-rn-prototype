@@ -16,7 +16,11 @@ export default class BossScreen extends React.Component {
         userEmail: null,
         userUID: null
     };
-    onComponentFocus() {
+    subscribe() {
+        if (this.unsubscribe) {
+            console.log('BossScreen skipping setting classes listener as already set');
+            return;
+        }
         const userEmail = this.props.navigation.getParam('userEmail', null) || (firebase.auth().currentUser && firebase.auth().currentUser.email);
         const userUID = this.props.navigation.getParam('userUID', null) || (firebase.auth().currentUser && firebase.auth().currentUser.uid);
         console.log('BossScreen userEmail param:', userEmail);
@@ -37,15 +41,22 @@ export default class BossScreen extends React.Component {
         });
         console.log('BossScreen set classes listener');
     }
+    onComponentFocus() {
+        console.log('BossScreen will focus');
+        this.subscribe();
+    }
     onComponentBlur() {
+        console.log('BossScreen will blur');
         console.log('removing BossScreen classes listener');
         this.unsubscribe && this.unsubscribe();
     }
     componentDidMount() {
         console.log('BossScreen did mount');
+        this.subscribe();
     }
     componentWillUnmount() {
         console.log('BossScreen will unmount');
+        console.log('removing BossScreen classes listener');
         this.unsubscribe && this.unsubscribe();
     }
     render() {
@@ -55,8 +66,8 @@ export default class BossScreen extends React.Component {
                     <NavigationEvents
                         onWillFocus={_ => this.onComponentFocus()}
                         onWillBlur={_ => this.onComponentBlur()}
-                        onDidFocus={payload => console.log('did focus', payload)}
-                        onDidBlur={payload => console.log('did blur', payload)}
+                        onDidFocus={payload => console.log('BossScreen did focus', payload)}
+                        onDidBlur={payload => console.log('BossScreen did blur', payload)}
                     />
                     <AddItem text='Add a class' onPress={() => this.onPress()} />
                     <View>

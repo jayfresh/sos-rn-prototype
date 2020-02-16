@@ -13,9 +13,11 @@ export default class QueensScreen extends React.Component {
         classList: [],
         bookings: []
     };
-    // Note: may need to use onComponentFocus / onComponentBlur as with BossScreen
-    componentDidMount() {
-        console.log('QueenScreen did mount');
+    subscribe() {
+        if (this.unsubscribe) {
+            console.log('QueenScreen skipping setting classes listener as already set');
+            return;
+        }
         const loggedInQueenId = firebase.auth().currentUser.uid;
         this.unsubscribe = db.collection('classes').orderBy('startTime')
         .onSnapshot(querySnapshot => {
@@ -30,6 +32,12 @@ export default class QueensScreen extends React.Component {
                 bookings: myList
             });
         });
+        console.log('QueenScreen set classes listener');
+    }
+    // Note: may need to use onComponentFocus / onComponentBlur as with BossScreen
+    componentDidMount() {
+        console.log('QueenScreen did mount');
+        this.subscribe();
     }
     componentWillUnmount() {
         console.log('QueenScreen will unmount');
