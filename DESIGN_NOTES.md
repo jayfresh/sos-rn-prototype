@@ -1,5 +1,19 @@
 # Design notes
 
+## Data management
+
+At time of writing, for state management the app uses a mix of local state and a small amount of the Context API. The latter is currently
+used where the data is not changing, but it is useful to store it globally and feed it down to component consumers e.g. for exposing roles.
+
+A challenge at present is that the connections to Firestore are made when components are mounted, and the results stored in local state. Due
+to the way that React Navigation (at least at 4.x) currently works, components are unmounted and mounted, and focussed and blurred in a confusing
+pattern - typically a component will be unmounted and then immediately mounted again, when swapping between tabs. This means that Firestore
+connections are frequently being refreshed. Even at a relatively modest level of complexity, this state management approach is not feeling
+very satisfactory. It feels like a centrally-managed approach to the data that comes from Firestore is the way to go, but the question is
+how best to feed that through to the components' state and get them to rerender. It is worth experimenting with this.
+
+Useful documentation on the Context API: https://reactjs.org/docs/context.html.
+
 ## The use of Stripe Connect to manage BOSS accounts and take payments
 
 ### Registering BOSSES

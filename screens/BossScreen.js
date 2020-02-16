@@ -18,12 +18,17 @@ class BossScreen extends React.Component {
         userUID: null
     };
     subscribe() {
-        if (this.unsubscribe) {
-            console.log('BossScreen skipping setting classes listener as already set');
-            return;
-        }
         const userEmail = this.props.navigation.getParam('userEmail', null) || (firebase.auth().currentUser && firebase.auth().currentUser.email);
         const userUID = this.props.navigation.getParam('userUID', null) || (firebase.auth().currentUser && firebase.auth().currentUser.uid);
+        const userChange = userUID !== this.state.userUID;
+        if (this.unsubscribe) {
+            if (!userChange) {
+                console.log('BossScreen skipping setting classes listener as already set and userUID has not changed');
+                return;
+            }
+            // clear the listener before requerying
+            this.unsubscribe();
+        }
         console.log('BossScreen userEmail/userUID params:', userEmail, userUID);
         this.setState({userEmail, userUID});
 
