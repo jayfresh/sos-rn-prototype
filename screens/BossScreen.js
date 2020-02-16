@@ -5,11 +5,12 @@ import { Divider, ListItem, ThemeProvider } from 'react-native-elements';
 
 import { db, firebase } from '../config';
 import AddItem from '../components/AddItem';
+import { withContext } from '../common/context';
 import commonStyles from '../common/styles';
 import theme from '../common/theme';
 import { classTitle, classSubtitle } from '../common/utilities';
 
-export default class BossScreen extends React.Component {
+class BossScreen extends React.Component {
     unsubscribe = null;
     state = {
         classList: null,
@@ -23,7 +24,7 @@ export default class BossScreen extends React.Component {
         }
         const userEmail = this.props.navigation.getParam('userEmail', null) || (firebase.auth().currentUser && firebase.auth().currentUser.email);
         const userUID = this.props.navigation.getParam('userUID', null) || (firebase.auth().currentUser && firebase.auth().currentUser.uid);
-        console.log('BossScreen userEmail param:', userEmail);
+        console.log('BossScreen userEmail/userUID params:', userEmail, userUID);
         this.setState({userEmail, userUID});
 
         this.unsubscribe = db.collection('classes')
@@ -99,3 +100,5 @@ export default class BossScreen extends React.Component {
 BossScreen.navigationOptions = {
     title: 'Hey BOSS!',
 };
+
+export default withContext(BossScreen);

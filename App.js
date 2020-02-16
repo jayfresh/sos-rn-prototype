@@ -13,7 +13,7 @@ class App extends React.Component {
         super(props);
         this.state = {
             isLoadingComplete: false,
-            count: 0
+            RoleManager: context.RoleManager
         };
     }
     setLoadingComplete() {
@@ -34,7 +34,7 @@ class App extends React.Component {
           return (
             <KeyboardAvoidingView behavior='padding' style={styles.container}>
               {Platform.OS === 'ios' && <StatusBar barStyle="default" />}
-              <ContextProvider value={context}>
+              <ContextProvider value={this.state}>
                   <AppNavigator />
               </ContextProvider>
             </KeyboardAvoidingView>

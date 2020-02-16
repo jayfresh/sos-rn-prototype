@@ -15,7 +15,7 @@ import AddItem from '../components/AddItem';
 
 let list = null;
 
-export default class HomeScreen extends React.Component {
+class HomeScreen extends React.Component {
     unsubscribe = null;
     state = {
         userList: list
@@ -150,3 +150,5 @@ const styles = StyleSheet.create({
     marginTop: 5,
   }
 });
+
+export default HomeScreen;

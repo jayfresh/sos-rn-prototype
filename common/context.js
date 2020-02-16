@@ -14,6 +14,5 @@ export const withContext = Component => props => (
 );
 
 export const context = {
-    RoleManager,
-    data: {}
+    RoleManager
 };
