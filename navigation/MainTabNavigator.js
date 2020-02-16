@@ -56,7 +56,8 @@ HomeStack.path = '';
 const BossStack = createStackNavigator(
   {
       Boss: BossScreen,
-      NewClass: NewClassScreen,
+      ClassDetail: ClassDetailScreen,
+      NewClass: NewClassScreen
   },
   config
 );

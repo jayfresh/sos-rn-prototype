@@ -70,6 +70,8 @@ export default class BossScreen extends React.Component {
                                 title={classTitle(c) + (c.bookings && c.bookings.length ? ` (${c.bookings.length} bookings)` : '')}
                                 subtitle={classSubtitle(c)}
                                 bottomDivider
+                                chevron
+                                onPress={() => this.props.navigation.navigate('ClassDetail', {class: c, bossMode: true})}
                             />
                         ))}
                         { this.state.classList && this.state.classList.length === 0 && <Text>No BOSSES</Text> }

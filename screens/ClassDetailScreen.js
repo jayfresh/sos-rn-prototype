@@ -1,13 +1,14 @@
 import React from 'react';
 import { View, ScrollView } from 'react-native';
 import { NavigationEvents } from 'react-navigation';
-import { Button, Input, Overlay, Text, ThemeProvider } from 'react-native-elements';
+import { Button, ListItem, Overlay, Text, ThemeProvider } from 'react-native-elements';
 
 import { db, firebase } from '../config';
+import { withContext } from '../common/context';
 import commonStyles from '../common/styles';
 import theme from '../common/theme';
 
-export default class ClassDetailScreen extends React.Component {
+class ClassDetailScreen extends React.Component {
     state = {
         userID: null,
         successOverlayVisible: false,
@@ -16,13 +17,16 @@ export default class ClassDetailScreen extends React.Component {
         className: '',
         classDuration: '',
         classLocation: '',
-        classBookings: '',
-        booked: false
+        classBookings: null,
+        classBookingCount: 0,
+        booked: false,
+        bossMode: false
     };
     componentDidMount = () => {
         console.log('ClassDetailScreen did mount');
         const loggedInQueenId = firebase.auth().currentUser.uid;
         const c = this.props.navigation.getParam('class');
+        const bossMode = this.props.navigation.getParam('bossMode');
         if (c) {
             this.setState({
                 userID: loggedInQueenId,
@@ -31,8 +35,10 @@ export default class ClassDetailScreen extends React.Component {
                 className: c.name,
                 classDuration: c.duration,
                 classLocation: c.location,
-                classBookings: c.bookings && c.bookings.length,
-                booked: c.bookings && c.bookings.includes(loggedInQueenId)
+                classBookings: c.bookings,
+                classBookingCount: c.bookings ? c.bookings.length : 0,
+                booked: c.bookings && c.bookings.includes(loggedInQueenId),
+                bossMode
             });
         }
     }
@@ -114,9 +120,24 @@ export default class ClassDetailScreen extends React.Component {
                             onPress={this.onPressSubmit}
                             loading={this.state.loading}
                         />
+                        {this.state.bossMode && this.props.context.canBoss() && (
+                            <View>
+                                <Text style={commonStyles.headingText}>Bookings ({this.state.classBookingCount})</Text>
+                                { this.state.classBookings && this.state.classBookings.map((b, i) => (
+                                    <ListItem
+                                        key={i}
+                                        title={b}
+                                        bottomDivider
+                                    />
+                                ))}
+                                { this.state.classBookingCount === 0 && <Text style={[commonStyles.bodyText, {marginVertical: 20}]}>No bookings</Text> }
+                            </View>
+                        )}
                     </View>
                 </ScrollView>
             </ThemeProvider>
         );
     }
 }
+
+export default withContext(ClassDetailScreen);
